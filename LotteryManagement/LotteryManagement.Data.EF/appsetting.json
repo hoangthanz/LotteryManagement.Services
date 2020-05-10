@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "lotteryManagementDb": "Server=.;Database=lotteryManagementDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+}
