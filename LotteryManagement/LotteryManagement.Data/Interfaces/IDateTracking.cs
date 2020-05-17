@@ -6,6 +6,6 @@ namespace LotteryManagement.Data.Interfaces
     {
         DateTime DateCreated { set; get; }
 
-        DateTime DateModified { set; get; }
+        DateTime? DateModified { set; get; }
     }
 }

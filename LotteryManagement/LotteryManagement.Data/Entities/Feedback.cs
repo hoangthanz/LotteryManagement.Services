@@ -28,7 +28,7 @@ namespace LotteryManagement.Data.Entities
 
         public Status Status { set; get; }
         public DateTime DateCreated { set; get; }
-        public DateTime DateModified { set; get; }
+        public DateTime? DateModified { set; get; }
       
     }
 }

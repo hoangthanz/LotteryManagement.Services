@@ -27,7 +27,7 @@ namespace LotteryManagement.Data.Entities
 
 
         public DateTime DateCreated { set; get; }
-        public DateTime DateModified { set; get; }
+        public DateTime? DateModified { set; get; }
         public Status Status { set; get; }
 
         public List<AnnouncementUser> AnnouncementUsers { get; set; }

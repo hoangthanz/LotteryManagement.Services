@@ -39,9 +39,9 @@ namespace LotteryManagement.Application.System.Users
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new[]
             {
-                new Claim(ClaimTypes.Email,user.Email),
-                new Claim(ClaimTypes.GivenName,user.FirstName),
-                new Claim(ClaimTypes.Role, string.Join(";",roles)),
+                new Claim("Email",user.Email),
+                new Claim("Name",user.FirstName),
+                new Claim("Role", string.Join(";",roles)),
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

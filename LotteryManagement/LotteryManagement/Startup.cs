@@ -1,6 +1,8 @@
+using AutoMapper;
 using LotteryManagement.Application.System.Users;
 using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
+using LotteryManagement.Infrastructure.Interfaces;
 using LotteryManagement.Utilities.Constants;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,6 +46,12 @@ namespace LotteryManagement
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
             services.AddTransient<IUserService, UserService>();
 
+
+            services.AddAutoMapper();
+
+            services.AddSingleton(Mapper.Configuration);
+
+            services.AddScoped<IMapper>(sp => new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService));
 
             services.AddSwaggerGen(c =>
             {
@@ -100,6 +108,11 @@ namespace LotteryManagement
                         .AllowAnyMethod();
                 });
             });
+
+
+            services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
+            services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
