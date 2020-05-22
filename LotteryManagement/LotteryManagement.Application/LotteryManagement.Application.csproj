@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\" />
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.5.1" />
@@ -17,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LotteryManagement.Data.EF\LotteryManagement.Data.EF.csproj" />
     <ProjectReference Include="..\LotteryManagement.Data\LotteryManagement.Data.csproj" />
+    <ProjectReference Include="..\LotteryManagement.Utilities\LotteryManagement.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

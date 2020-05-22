@@ -23,6 +23,8 @@
             Data = data;
         }
 
+
+
         public object Data { get; set; }
 
         public bool Success { get; set; }

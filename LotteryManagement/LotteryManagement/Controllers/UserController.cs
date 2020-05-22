@@ -8,7 +8,6 @@ namespace LotteryManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UsersController : ControllerBase
     {
 
@@ -20,7 +19,7 @@ namespace LotteryManagement.Controllers
 
         [HttpPost("authenticate")]
         [AllowAnonymous]
-        public async Task<IActionResult> Authenticate([FromForm]LoginRequest request)
+        public async Task<IActionResult> Authenticate(LoginRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

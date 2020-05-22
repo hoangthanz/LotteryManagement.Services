@@ -1,12 +1,13 @@
 ﻿using LotteryManagement.Data.Enums;
-using LotteryManagement.Data.Interfaces;
-using LotteryManagement.Infrastructure.SharedKernel;
 
-namespace LotteryManagement.Data.Entities
+namespace LotteryManagement.Application.ViewModels
 {
-    public class ProfitPercent : DomainEntity<string>, ISwitchable
+    public class ProfitPercentViewModel
     {
+        public string Id { get; set; }
         public string Name { get; set; }
+      
+
 
         /* Tỷ lệ số để hiển thị */
 

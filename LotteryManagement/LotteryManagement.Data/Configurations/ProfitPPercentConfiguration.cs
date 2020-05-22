@@ -12,32 +12,6 @@ namespace LotteryManagement.Data.Configurations
             builder.HasKey(x => x.Id);
 
 
-            builder.Property(x => x.Lo2SoPercent).IsRequired();
-            builder.Property(x => x.Lo2SoDauPercent).IsRequired();
-            builder.Property(x => x.Lo2So1KPercent).IsRequired();
-            builder.Property(x => x.Lo3SoPercent).IsRequired();
-            builder.Property(x => x.Lo4SoPercent).IsRequired();
-
-            builder.Property(x => x.Xien2Percent).IsRequired();
-            builder.Property(x => x.Xien3Percent).IsRequired();
-            builder.Property(x => x.Xien4Percent).IsRequired();
-
-            builder.Property(x => x.DeDacBietPercent).IsRequired();
-            builder.Property(x => x.DeDauDacBietPercent).IsRequired();
-            builder.Property(x => x.DeGiai7Percent).IsRequired();
-            builder.Property(x => x.DeGiaiNhatPercent).IsRequired();
-
-            builder.Property(x => x.DauPercent).IsRequired();
-            builder.Property(x => x.DuoiPercent).IsRequired();
-
-            builder.Property(x => x.Cang3Percent).IsRequired();
-            builder.Property(x => x.Cang4Percent).IsRequired();
-
-            builder.Property(x => x.TruotXien4Percent).IsRequired();
-            builder.Property(x => x.TruotXien8Percent).IsRequired();
-            builder.Property(x => x.TruotXien10Percent).IsRequired();
-
-
             // Pre
             builder.Property(x => x.Lo2SoPrevious).IsRequired();
             builder.Property(x => x.Lo2SoDauPrevious).IsRequired();

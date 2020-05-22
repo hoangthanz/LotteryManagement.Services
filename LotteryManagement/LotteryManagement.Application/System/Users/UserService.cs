@@ -1,10 +1,12 @@
 ﻿using LotteryManagement.Application.ViewModels.Users;
+using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,14 +18,21 @@ namespace LotteryManagement.Application.System.Users
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly LotteryManageDbContext _context;
         private readonly IConfiguration _config;
 
-        public UserService(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, RoleManager<AppRole> roleManager, IConfiguration config)
+        public UserService(
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager,
+            RoleManager<AppRole> roleManager,
+            IConfiguration config,
+            LotteryManageDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = config;
+            _context = context;
         }
 
         public async Task<string> Authencate(LoginRequest request)
@@ -36,20 +45,43 @@ namespace LotteryManagement.Application.System.Users
             {
                 return null;
             }
-            var roles = await _userManager.GetRolesAsync(user);
+
+
+            var per = (from u in _context.AppUsers
+                       join p in _context.Permissions on u.Id equals p.UserId
+                       join f in _context.Functions on p.FunctionId equals f.Id
+                       where user.Id == u.Id
+                       select new
+                       {
+                           f.Name,
+                           f.Code,
+                           p.hasRead,
+                           p.hasCreate,
+                           p.hasUpdate,
+                           p.hasDelete
+                       }).ToList();
+
+            //var claims = new[]
+            //{
+            //    new Claim("Email",user.Email),
+            //    new Claim("Name",user.FirstName),
+            //    new Claim("Permission", string.Join(";",per)),
+            //};
+
             var claims = new[]
             {
                 new Claim("Email",user.Email),
                 new Claim("Name",user.FirstName),
-                new Claim("Role", string.Join(";",roles)),
+                new Claim("Permission", per[0].Code),
             };
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(_config["Tokens:Issuer"],
                 _config["Tokens:Issuer"],
                 claims,
-                expires: DateTime.Now.AddSeconds(120),
+                expires: DateTime.Now.AddMinutes(10),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

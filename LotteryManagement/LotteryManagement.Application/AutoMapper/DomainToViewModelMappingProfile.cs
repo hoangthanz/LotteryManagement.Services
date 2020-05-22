@@ -18,6 +18,7 @@ namespace LotteryManagement.Application.AutoMapper
 
 
             CreateMap<Announcement, AnnouncementViewModel>().MaxDepth(2);
+            CreateMap<ProfitPercent, ProfitPercentViewModel>();
 
 
         }

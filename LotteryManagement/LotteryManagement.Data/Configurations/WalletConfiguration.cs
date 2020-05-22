@@ -8,7 +8,7 @@ namespace LotteryManagement.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Wallet> builder)
         {
-            builder.ToTable(" Wallets");
+            builder.ToTable("Wallets");
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Total).IsRequired();

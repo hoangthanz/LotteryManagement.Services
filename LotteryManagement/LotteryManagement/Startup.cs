@@ -1,4 +1,6 @@
 using AutoMapper;
+using LotteryManagement.Application.Implementation;
+using LotteryManagement.Application.Interfaces;
 using LotteryManagement.Application.System.Users;
 using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
@@ -23,11 +25,25 @@ namespace LotteryManagement
             Configuration = configuration;
         }
 
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.AllowAnyOrigin()
+                                                          .AllowAnyHeader()
+                                                          .AllowAnyMethod();
+                                                          
+                                  });
+            });
+
             services.AddControllers();
 
             services.AddDbContext<LotteryManageDbContext>(options =>
@@ -55,7 +71,7 @@ namespace LotteryManagement
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MamEdu API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Lottery Manager API", Version = "v1" });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -98,20 +114,14 @@ namespace LotteryManagement
                        options.Audience = "thanhoangAPI";
                    });
 
-            services.AddCors(options =>
-            {
-                // this defines a CORS policy called "default"
-                options.AddPolicy("default", policy =>
-                {
-                    policy.WithOrigins("https://localhost:5003")
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                });
-            });
+
 
 
             services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
             services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
+
+
+            services.AddTransient<IProfitPercentService, ProfitPercentService>();
 
         }
 
@@ -123,12 +133,16 @@ namespace LotteryManagement
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            app.UseCors(MyAllowSpecificOrigins);
 
-            app.UseCors("default");
+            app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseRouting();
+
+
+
+
             app.UseAuthorization();
 
             app.UseSwagger();

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LotteryManagement.Data.EF.Migrations
 {
-    public partial class initalizePro : Migration
+    public partial class initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -129,14 +129,22 @@ namespace LotteryManagement.Data.EF.Migrations
                     FirstName = table.Column<string>(maxLength: 200, nullable: false),
                     LastName = table.Column<string>(maxLength: 200, nullable: false),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
-                    NickName = table.Column<string>(nullable: true),
-                    TransactionPassword = table.Column<string>(nullable: true),
+                    RefRegisterLink = table.Column<string>(nullable: false),
+                    NickName = table.Column<string>(nullable: false),
+                    TransactionPassword = table.Column<string>(nullable: false),
                     Avatar = table.Column<string>(nullable: true),
-                    WalletId = table.Column<string>(nullable: true)
+                    WalletId = table.Column<string>(nullable: false),
+                    RootUserId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AppUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppUsers_AppUsers_RootUserId",
+                        column: x => x.RootUserId,
+                        principalTable: "AppUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -240,25 +248,7 @@ namespace LotteryManagement.Data.EF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    Lo2SoPercent = table.Column<double>(nullable: false),
-                    Lo2SoDauPercent = table.Column<double>(nullable: false),
-                    Lo2So1KPercent = table.Column<double>(nullable: false),
-                    Lo3SoPercent = table.Column<double>(nullable: false),
-                    Lo4SoPercent = table.Column<double>(nullable: false),
-                    Xien2Percent = table.Column<double>(nullable: false),
-                    Xien3Percent = table.Column<double>(nullable: false),
-                    Xien4Percent = table.Column<double>(nullable: false),
-                    DeDacBietPercent = table.Column<double>(nullable: false),
-                    DeDauDacBietPercent = table.Column<double>(nullable: false),
-                    DeGiai7Percent = table.Column<double>(nullable: false),
-                    DeGiaiNhatPercent = table.Column<double>(nullable: false),
-                    DauPercent = table.Column<double>(nullable: false),
-                    DuoiPercent = table.Column<double>(nullable: false),
-                    Cang3Percent = table.Column<double>(nullable: false),
-                    Cang4Percent = table.Column<double>(nullable: false),
-                    TruotXien4Percent = table.Column<double>(nullable: false),
-                    TruotXien8Percent = table.Column<double>(nullable: false),
-                    TruotXien10Percent = table.Column<double>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
                     Lo2SoPrevious = table.Column<double>(nullable: false),
                     Lo2SoDauPrevious = table.Column<double>(nullable: false),
                     Lo2So1KPrevious = table.Column<double>(nullable: false),
@@ -297,7 +287,8 @@ namespace LotteryManagement.Data.EF.Migrations
                     TruotXien4After = table.Column<double>(nullable: false),
                     TruotXien8After = table.Column<double>(nullable: false),
                     TruotXien10After = table.Column<double>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
+                    Status = table.Column<int>(nullable: false),
+                    IsUsing = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -340,30 +331,6 @@ namespace LotteryManagement.Data.EF.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransactionHistories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: " Wallets",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    WalletId = table.Column<string>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: false),
-                    AppUserId = table.Column<Guid>(nullable: true),
-                    Total = table.Column<double>(nullable: false),
-                    DateCreated = table.Column<DateTime>(nullable: false),
-                    DateModified = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ Wallets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ Wallets_AppUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AppUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -440,6 +407,30 @@ namespace LotteryManagement.Data.EF.Migrations
                         principalTable: "AppUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Wallets",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    WalletId = table.Column<string>(nullable: true),
+                    UserId = table.Column<Guid>(nullable: false),
+                    AppUserId = table.Column<Guid>(nullable: true),
+                    Total = table.Column<double>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Wallets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Wallets_AppUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AppUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -591,11 +582,6 @@ namespace LotteryManagement.Data.EF.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ Wallets_AppUserId",
-                table: " Wallets",
-                column: "AppUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AnnouncementUsers_AnnouncementId",
                 table: "AnnouncementUsers",
                 column: "AnnouncementId");
@@ -604,6 +590,11 @@ namespace LotteryManagement.Data.EF.Migrations
                 name: "IX_AnnouncementUsers_UserId",
                 table: "AnnouncementUsers",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppUsers_RootUserId",
+                table: "AppUsers",
+                column: "RootUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bao_Lottos_TicketId",
@@ -641,6 +632,11 @@ namespace LotteryManagement.Data.EF.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Wallets_AppUserId",
+                table: "Wallets",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Xien_Lottos_TicketId",
                 table: "Xien_Lottos",
                 column: "TicketId");
@@ -648,9 +644,6 @@ namespace LotteryManagement.Data.EF.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: " Wallets");
-
             migrationBuilder.DropTable(
                 name: "AnnouncementUsers");
 
@@ -710,6 +703,9 @@ namespace LotteryManagement.Data.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "TransactionHistories");
+
+            migrationBuilder.DropTable(
+                name: "Wallets");
 
             migrationBuilder.DropTable(
                 name: "Xien_Lottos");

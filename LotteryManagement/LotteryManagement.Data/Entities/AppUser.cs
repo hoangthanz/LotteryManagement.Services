@@ -10,6 +10,8 @@ namespace LotteryManagement.Data.Entities
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
 
+        public string RefRegisterLink { get; set; }
+
         public string NickName { get; set; }
 
         public string TransactionPassword { get; set; }
@@ -28,5 +30,11 @@ namespace LotteryManagement.Data.Entities
         public List<Permission> Permissions { get; set; }
 
         public List<Ticket> Tickets { get; set; }
+
+        public List<AppUser> RefUsers { get; set; }
+
+        public AppUser RootUser { get; set; }
+
+        public Guid? RootUserId { get; set; }
     }
 }

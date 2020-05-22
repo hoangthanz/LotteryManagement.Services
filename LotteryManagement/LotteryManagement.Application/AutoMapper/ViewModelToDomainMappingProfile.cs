@@ -18,7 +18,7 @@ namespace LotteryManagement.Application.AutoMapper
 
             CreateMap<FeedbackViewModel, Feedback>();
 
-         
+            CreateMap<ProfitPercentViewModel, ProfitPercent>();
 
 
             CreateMap<AnnouncementViewModel, Announcement>()
