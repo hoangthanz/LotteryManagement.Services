@@ -8,13 +8,16 @@ using LotteryManagement.Infrastructure.Interfaces;
 using LotteryManagement.Utilities.Constants;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Collections.Generic;
+using System.IO;
 
 namespace LotteryManagement
 {
@@ -40,14 +43,26 @@ namespace LotteryManagement
                                       builder.AllowAnyOrigin()
                                                           .AllowAnyHeader()
                                                           .AllowAnyMethod();
-                                                          
+
                                   });
             });
 
-            services.AddControllers();
 
             services.AddDbContext<LotteryManageDbContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
+              options.UseSqlServer(Configuration.GetConnectionString(SystemConstants.MainConnectionString)));
+
+
+            services.Configure<FormOptions>(o =>
+            {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });
+
+
+            services.AddControllers();
+
+
 
 
             services.AddIdentity<AppUser, AppRole>()
@@ -114,7 +129,7 @@ namespace LotteryManagement
                        options.Audience = "thanhoangAPI";
                    });
 
-
+            services.AddDirectoryBrowser();
 
 
             services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
@@ -128,6 +143,15 @@ namespace LotteryManagement
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images")),
+                RequestPath = "/images"
+            });
+                
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -143,12 +167,14 @@ namespace LotteryManagement
 
 
 
+
             app.UseAuthorization();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "MamEdu API V1");
+                c.RoutePrefix = string.Empty;
             });
 
 
