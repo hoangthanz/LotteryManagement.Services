@@ -11,8 +11,11 @@ namespace LotteryManagement.Data.Configurations
             builder.ToTable("Wallets");
             builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Total).IsRequired();
+            builder.Property(x => x.Coin).IsRequired();
 
+            builder.Property(x => x.PromotionCoin).IsRequired();
+
+            builder.Property(x => x.PendingCoin).IsRequired();
 
         }
     }

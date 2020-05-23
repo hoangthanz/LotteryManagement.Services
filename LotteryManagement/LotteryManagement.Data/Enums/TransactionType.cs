@@ -2,7 +2,8 @@
 
 namespace LotteryManagement.Data.Enums
 {
-    public enum TransactionHistoryStatus
+
+    public enum TransactionType
     {
         [Description("Nạp tiền")]
         PayIn,
@@ -12,7 +13,5 @@ namespace LotteryManagement.Data.Enums
         ToReward,
         [Description("Rút tiền")]
         Withdraw,
-
-
     }
 }

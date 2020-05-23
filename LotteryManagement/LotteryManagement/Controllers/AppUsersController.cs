@@ -1,12 +1,13 @@
-﻿using System;
+﻿using AutoMapper;
+using LotteryManagement.Application.ViewModels;
+using LotteryManagement.Data.EF;
+using LotteryManagement.Data.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using LotteryManagement.Data.EF;
-using LotteryManagement.Data.Entities;
 
 namespace LotteryManagement.Controllers
 {
@@ -23,9 +24,11 @@ namespace LotteryManagement.Controllers
 
         // GET: api/AppUsers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetAppUsers()
+        public async Task<ActionResult<IEnumerable<AppUserViewModel>>> GetAppUsers()
         {
-            return await _context.AppUsers.ToListAsync();
+            var appUsers = await _context.AppUsers.ToListAsync();
+            var appUsers_View = Mapper.Map<List<AppUser>, List<AppUserViewModel>>(appUsers);
+            return appUsers_View;
         }
 
         // GET: api/AppUsers/5

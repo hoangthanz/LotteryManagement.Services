@@ -9,10 +9,6 @@ namespace LotteryManagement.Data.Configurations
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
             builder.ToTable("AppUsers");
-            builder.Property(x => x.FirstName).IsRequired().HasMaxLength(200);
-            builder.Property(x => x.LastName).IsRequired().HasMaxLength(200);
-            builder.Property(x => x.DateOfBirth).IsRequired();
-
             builder.Property(x => x.NickName).IsRequired();
             builder.Property(x => x.TransactionPassword).IsRequired();
             builder.Property(x => x.WalletId).IsRequired();

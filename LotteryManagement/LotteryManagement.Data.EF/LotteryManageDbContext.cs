@@ -47,7 +47,7 @@ namespace LotteryManagement.Data.EF
             builder.ApplyConfiguration(new TicketConfiguration());
             builder.ApplyConfiguration(new TransactionHistoryConfiguration());
             builder.ApplyConfiguration(new WalletConfiguration());
-
+            builder.ApplyConfiguration(new TransactionConfiguration());
 
             builder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             builder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -84,6 +84,8 @@ namespace LotteryManagement.Data.EF
         public DbSet<Promotion> Promotions { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<TransactionHistory> TransactionHistories { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
+
         public DbSet<Wallet> Wallets { get; set; }
 
         public DbSet<Xien_Lotto> Xien_Lottos { get; set; }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LotteryManagement.Data.EF.Migrations
 {
     [DbContext(typeof(LotteryManageDbContext))]
-    [Migration("20200522150334_initialize")]
+    [Migration("20200523162317_initialize")]
     partial class initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -142,14 +142,10 @@ namespace LotteryManagement.Data.EF.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -775,6 +771,40 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.ToTable("Tickets");
                 });
 
+            modelBuilder.Entity("LotteryManagement.Data.Entities.Transaction", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("BillStatus")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Coin")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Transactions");
+                });
+
             modelBuilder.Entity("LotteryManagement.Data.Entities.TransactionHistory", b =>
                 {
                     b.Property<string>("Id")
@@ -782,6 +812,9 @@ namespace LotteryManagement.Data.EF.Migrations
 
                     b.Property<int>("BillStatus")
                         .HasColumnType("int");
+
+                    b.Property<double>("Coin")
+                        .HasColumnType("float");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -796,7 +829,7 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int>("TransactionHistoryStatus")
+                    b.Property<int>("TransactionHistoryType")
                         .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
@@ -815,17 +848,23 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<Guid?>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<double>("Coin")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("PendingCoin")
+                        .HasColumnType("float");
+
+                    b.Property<double>("PromotionCoin")
+                        .HasColumnType("float");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
-
-                    b.Property<double>("Total")
-                        .HasColumnType("float");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");

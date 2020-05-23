@@ -126,8 +126,8 @@ namespace LotteryManagement.Data.EF.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(maxLength: 200, nullable: false),
-                    LastName = table.Column<string>(maxLength: 200, nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
                     RefRegisterLink = table.Column<string>(nullable: false),
                     NickName = table.Column<string>(nullable: false),
@@ -322,15 +322,35 @@ namespace LotteryManagement.Data.EF.Migrations
                     Id = table.Column<string>(nullable: false),
                     Content = table.Column<string>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
-                    TransactionHistoryStatus = table.Column<int>(nullable: false),
+                    TransactionHistoryType = table.Column<int>(nullable: false),
                     BillStatus = table.Column<int>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true),
-                    Status = table.Column<int>(nullable: false)
+                    Status = table.Column<int>(nullable: false),
+                    Coin = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TransactionHistories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Transactions",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Content = table.Column<string>(nullable: true),
+                    UserId = table.Column<Guid>(nullable: false),
+                    TransactionType = table.Column<int>(nullable: false),
+                    BillStatus = table.Column<int>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    Coin = table.Column<double>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -417,7 +437,9 @@ namespace LotteryManagement.Data.EF.Migrations
                     WalletId = table.Column<string>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
                     AppUserId = table.Column<Guid>(nullable: true),
-                    Total = table.Column<double>(nullable: false),
+                    Coin = table.Column<double>(nullable: false),
+                    PromotionCoin = table.Column<double>(nullable: false),
+                    PendingCoin = table.Column<double>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true),
                     Status = table.Column<int>(nullable: false)
@@ -703,6 +725,9 @@ namespace LotteryManagement.Data.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "TransactionHistories");
+
+            migrationBuilder.DropTable(
+                name: "Transactions");
 
             migrationBuilder.DropTable(
                 name: "Wallets");

@@ -10,12 +10,15 @@ namespace LotteryManagement.Data.Entities
         public string WalletId { get; set; }
 
         public Guid UserId { get; set; }
+
         public AppUser AppUser { get; set; }
 
-        public double Total { get; set; }
+        
+        public double Coin { get; set; }
 
+        public double PromotionCoin { get; set; }
 
-
+        public double PendingCoin { get; set; }
 
         public DateTime DateCreated { set; get; }
         public DateTime? DateModified { set; get; }

@@ -5,12 +5,17 @@ namespace LotteryManagement.Application.ViewModels
     public class AppUserViewModel
     {
         public Guid? Id { set; get; }
-     
+
+        public string UserName { get; set; }
+
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
         public DateTime DateOfBirth { get; set; }
+
+        public string Email { get; set; }
 
         public Guid? LinkRef { get; set; }
 
