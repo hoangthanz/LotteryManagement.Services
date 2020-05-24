@@ -9,7 +9,7 @@ namespace LotteryManagement.Data.Entities
     {
         public string WalletId { get; set; }
 
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
         public AppUser AppUser { get; set; }
 

@@ -4,7 +4,7 @@ namespace LotteryManagement.Application.ViewModels
 {
     public class AppUserViewModel
     {
-        public Guid? Id { set; get; }
+        public string Id { set; get; }
 
         public string UserName { get; set; }
 
@@ -17,7 +17,7 @@ namespace LotteryManagement.Application.ViewModels
 
         public string Email { get; set; }
 
-        public Guid? LinkRef { get; set; }
+        public string RootUserId { get; set; }
 
         public string NickName { get; set; }
 
@@ -27,5 +27,9 @@ namespace LotteryManagement.Application.ViewModels
 
         /* Đối chiếu mã ví khi nạpk tiền */
         public string WalletId { get; set; }
+
+        public string Password { get; set; }
+
+        public string PhoneNumber { get; set; }
     }
 }

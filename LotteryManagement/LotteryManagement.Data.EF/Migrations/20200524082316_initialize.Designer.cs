@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LotteryManagement.Data.EF.Migrations
 {
     [DbContext(typeof(LotteryManageDbContext))]
-    [Migration("20200523162317_initialize")]
+    [Migration("20200524082316_initialize")]
     partial class initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -173,7 +173,6 @@ namespace LotteryManagement.Data.EF.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("RefRegisterLink")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("RootUserId")
@@ -193,7 +192,6 @@ namespace LotteryManagement.Data.EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WalletId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -866,8 +864,9 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WalletId")
                         .HasColumnType("nvarchar(max)");

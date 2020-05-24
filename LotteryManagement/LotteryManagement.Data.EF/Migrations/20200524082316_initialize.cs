@@ -129,11 +129,11 @@ namespace LotteryManagement.Data.EF.Migrations
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
-                    RefRegisterLink = table.Column<string>(nullable: false),
+                    RefRegisterLink = table.Column<string>(nullable: true),
                     NickName = table.Column<string>(nullable: false),
                     TransactionPassword = table.Column<string>(nullable: false),
                     Avatar = table.Column<string>(nullable: true),
-                    WalletId = table.Column<string>(nullable: false),
+                    WalletId = table.Column<string>(nullable: true),
                     RootUserId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
@@ -435,7 +435,7 @@ namespace LotteryManagement.Data.EF.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     WalletId = table.Column<string>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
                     AppUserId = table.Column<Guid>(nullable: true),
                     Coin = table.Column<double>(nullable: false),
                     PromotionCoin = table.Column<double>(nullable: false),

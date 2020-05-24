@@ -11,8 +11,6 @@ namespace LotteryManagement.Data.Configurations
             builder.ToTable("AppUsers");
             builder.Property(x => x.NickName).IsRequired();
             builder.Property(x => x.TransactionPassword).IsRequired();
-            builder.Property(x => x.WalletId).IsRequired();
-            builder.Property(x => x.RefRegisterLink).IsRequired();
 
             builder.HasOne(x => x.RootUser).WithMany(x => x.RefUsers).HasForeignKey(x => x.RootUserId);
         }

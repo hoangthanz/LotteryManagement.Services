@@ -135,9 +135,8 @@ namespace LotteryManagement
             services.AddTransient(typeof(IUnitOfWork), typeof(EFUnitOfWork));
             services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
 
-
             services.AddTransient<IProfitPercentService, ProfitPercentService>();
-
+         
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

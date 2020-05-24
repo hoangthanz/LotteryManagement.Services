@@ -36,5 +36,7 @@ namespace LotteryManagement.Data.Entities
         public AppUser RootUser { get; set; }
 
         public Guid? RootUserId { get; set; }
+
+       
     }
 }

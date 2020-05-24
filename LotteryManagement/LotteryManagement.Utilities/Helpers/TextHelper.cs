@@ -108,7 +108,7 @@ namespace LotteryManagement.Utilities.Helpers
             return str + "đồng chẵn";
         }
 
-        public static string RandomString(int size, bool lowerCase)
+        public static string RandomString(int size, bool lowerCase=false)
         {
             StringBuilder builder = new StringBuilder();
             Random random = new Random();

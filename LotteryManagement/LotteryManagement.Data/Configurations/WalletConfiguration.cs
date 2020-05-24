@@ -13,6 +13,8 @@ namespace LotteryManagement.Data.Configurations
 
             builder.Property(x => x.Coin).IsRequired();
 
+            builder.Property(x => x.UserId).IsRequired();
+
             builder.Property(x => x.PromotionCoin).IsRequired();
 
             builder.Property(x => x.PendingCoin).IsRequired();
