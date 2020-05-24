@@ -90,5 +90,7 @@ namespace LotteryManagement.Data.EF
 
         public DbSet<Xien_Lotto> Xien_Lottos { get; set; }
 
+
+       
     }
 }

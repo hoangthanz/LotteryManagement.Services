@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LotteryManagement.Data.EF.Migrations
 {
     [DbContext(typeof(LotteryManageDbContext))]
-    [Migration("20200524091852_initialize")]
+    [Migration("20200524142045_initialize")]
     partial class initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -830,8 +830,8 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<int>("TransactionHistoryType")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -1,7 +1,11 @@
-﻿using LotteryManagement.Data.EF;
+﻿using AutoMapper;
+using LotteryManagement.Application.ViewModels;
+using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
+using LotteryManagement.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,9 +25,24 @@ namespace LotteryManagement.Controllers
 
         // GET: api/Wallets
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Wallet>>> GetWallets()
+        public async Task<ActionResult<IEnumerable<WalletViewModel>>> GetWallets()
         {
-            return await _context.Wallets.ToListAsync();
+            var wallets = await _context.Wallets.Where(x => !string.IsNullOrEmpty(x.UserId)).ToListAsync();
+            var walletViews = Mapper.Map<List<Wallet>, List<WalletViewModel>>(wallets);
+
+            foreach (var wallet in walletViews)
+            {
+                foreach (var user in _context.AppUsers)
+                {
+                    if (user.WalletId == wallet.WalletId)
+                    {
+                        wallet.AppUser = Mapper.Map<AppUser, AppUserViewModel>(user);
+                    }
+                }
+            }
+
+           
+            return walletViews;
         }
 
         // GET: api/Wallets/5
@@ -41,20 +60,46 @@ namespace LotteryManagement.Controllers
         }
 
         // PUT: api/Wallets/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutWallet(string id, Wallet wallet)
+        public async Task<IActionResult> PutWallet(string id, WalletViewModel wallet)
         {
             if (id != wallet.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(wallet).State = EntityState.Modified;
-
             try
             {
+                var currentWallet = await _context.Wallets.Where(x => x.Id == id).FirstOrDefaultAsync();
+                var user = await _context.AppUsers.Where(x => x.Id.ToString() == currentWallet.UserId).FirstOrDefaultAsync();
+                var newCoin = wallet.Coin - currentWallet.Coin;
+                var newPromotionCoin = wallet.PromotionCoin - currentWallet.PendingCoin;
+                
+                var transactionHistory = new TransactionHistory
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    UserId = wallet.UserId,
+                    BillStatus = BillStatus.Completed,
+                    Coin = Math.Abs(newCoin),
+                    DateCreated = DateTime.Now,
+                    Status = Status.Active,
+                    TransactionHistoryType = (newCoin > 0) ? TransactionHistoryType.PayIn : TransactionHistoryType.Withdraw,
+                };
+
+                string notifyTransaction = " đã nạp ";
+                if (transactionHistory.TransactionHistoryType == TransactionHistoryType.Withdraw)
+                    notifyTransaction = " đã rút ";
+
+                transactionHistory.Content = "Tài khoản " + user.UserName + notifyTransaction + newCoin + " vào lúc "  + transactionHistory.DateCreated.ToString("dd/MM/yyyy hh:mm:ss tt");
+
+                _context.TransactionHistories.Add(transactionHistory);
+
+
+                currentWallet.PromotionCoin = wallet.PromotionCoin;
+                currentWallet.Coin = wallet.Coin;
+                _context.Wallets.Update(currentWallet);
+
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -73,8 +118,7 @@ namespace LotteryManagement.Controllers
         }
 
         // POST: api/Wallets
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+
         [HttpPost]
         public async Task<ActionResult<Wallet>> PostWallet(Wallet wallet)
         {

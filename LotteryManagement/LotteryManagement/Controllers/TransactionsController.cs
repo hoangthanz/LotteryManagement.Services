@@ -1,12 +1,10 @@
-﻿using System;
+﻿using LotteryManagement.Data.EF;
+using LotteryManagement.Data.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using LotteryManagement.Data.EF;
-using LotteryManagement.Data.Entities;
 
 namespace LotteryManagement.Controllers
 {

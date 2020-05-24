@@ -11,8 +11,6 @@ namespace LotteryManagement.Data.Configurations
             builder.ToTable("TransactionHistories");
             builder.HasKey(x => x.Id);
             builder.Property(x => x.Content).IsRequired();
-           
-
         }
     }
 }

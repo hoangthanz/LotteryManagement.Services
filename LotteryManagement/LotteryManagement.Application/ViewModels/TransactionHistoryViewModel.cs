@@ -1,13 +1,11 @@
 ﻿using LotteryManagement.Data.Enums;
-using LotteryManagement.Data.Interfaces;
-using LotteryManagement.Infrastructure.SharedKernel;
 using System;
 
-namespace LotteryManagement.Data.Entities
+namespace LotteryManagement.Application.ViewModels
 {
-    public class TransactionHistory : DomainEntity<string>, ISwitchable, IDateTracking
+    public class TransactionHistoryViewModel
     {
-
+        public string Id { get; set; }
         public string Content { get; set; }
 
         public string UserId { get; set; }
@@ -19,5 +17,7 @@ namespace LotteryManagement.Data.Entities
         public DateTime? DateModified { set; get; }
         public Status Status { set; get; }
         public double Coin { get; set; }
+
+        public AppUserViewModel AppUser { get; set; }
     }
 }

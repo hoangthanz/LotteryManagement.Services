@@ -828,8 +828,8 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<int>("TransactionHistoryType")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

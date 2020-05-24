@@ -321,7 +321,7 @@ namespace LotteryManagement.Data.EF.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     Content = table.Column<string>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
                     TransactionHistoryType = table.Column<int>(nullable: false),
                     BillStatus = table.Column<int>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),

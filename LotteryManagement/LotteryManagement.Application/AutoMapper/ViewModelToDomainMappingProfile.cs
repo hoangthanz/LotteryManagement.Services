@@ -27,6 +27,10 @@ namespace LotteryManagement.Application.AutoMapper
             CreateMap<AnnouncementUserViewModel, AnnouncementUser>()
                 .ConstructUsing(c => new AnnouncementUser(c.AnnouncementId, c.UserId, c.HasRead));
 
+
+            CreateMap<WalletViewModel, Wallet>();
+            CreateMap<TransactionHistoryViewModel, TransactionHistory>();
+
         }
     }
 }

@@ -20,21 +20,16 @@ namespace LotteryManagement.Controllers
     public class AppUsersController : ControllerBase
     {
         private readonly LotteryManageDbContext _context;
-        private UserManager<AppUser> _userManager;
-        private SignInManager<AppUser> _signInManager;
-        private RoleManager<AppRole> _roleManager;
+        private readonly UserManager<AppUser> _userManager;
 
         public AppUsersController(
             LotteryManageDbContext context,
-            UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager,
-            RoleManager<AppRole> roleManager
+            UserManager<AppUser> userManager
+
         )
         {
             _context = context;
             _userManager = userManager;
-            _signInManager = signInManager;
-            _roleManager = roleManager;
 
         }
 
@@ -162,7 +157,8 @@ namespace LotteryManagement.Controllers
                     PendingCoin = 0,
                     PromotionCoin = 0,
                     Status = Status.Active,
-                    Id = TextHelper.RandomString(10),
+                    WalletId = TextHelper.RandomString(10),
+                    Id = Guid.NewGuid().ToString(),
                     UserId = ""
                 };
 
@@ -171,7 +167,7 @@ namespace LotteryManagement.Controllers
                 await _context.SaveChangesAsync();
                 var newWallet = _context.Wallets.Where(x => string.IsNullOrEmpty(x.UserId)).FirstOrDefault();
 
-                user.WalletId = newWallet.Id;
+                user.WalletId = newWallet.WalletId;
 
 
                 var result = await _userManager.CreateAsync(user, appUserView.Password);
