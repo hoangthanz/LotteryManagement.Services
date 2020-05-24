@@ -43,7 +43,7 @@ namespace LotteryManagement.Controllers
         public async Task<ActionResult<IEnumerable<AppUserViewModel>>> GetAppUsers()
         {
 
-            var appUsers = _context.AppUsers.ToList();
+            var appUsers = await _context.AppUsers.ToListAsync();
             var result = Mapper.Map<List<AppUser>, List<AppUserViewModel>>(appUsers);
             return result;
         }
@@ -72,9 +72,6 @@ namespace LotteryManagement.Controllers
                 return BadRequest();
             }
 
-
-
-
             try
             {
                 AppUser currentUser = await _userManager.FindByIdAsync(id);
@@ -84,18 +81,21 @@ namespace LotteryManagement.Controllers
                 currentUser.FirstName = appUser.FirstName;
                 currentUser.LastName = appUser.LastName;
                 currentUser.NickName = appUser.NickName;
-                currentUser.PhoneNumber = appUser.PhoneNumber;
                 currentUser.DateOfBirth = appUser.DateOfBirth;
                 currentUser.Avatar = appUser.Avatar;
 
+
                 IdentityResult result = await _userManager.UpdateAsync(currentUser);
                 if (result.Succeeded)
-                    return currentUser;
+                {
+                    var currentUserView = Mapper.Map<AppUser, AppUserViewModel>(currentUser);
+                    return currentUserView;
+                }
                 else
                 {
                     string error = "";
                     foreach (IdentityError e in result.Errors)
-                        error += e;
+                        error += e.Description;
                     return BadRequest(new ResponseResult(error));
                 }
 
@@ -187,7 +187,7 @@ namespace LotteryManagement.Controllers
 
                     var createdUserView = Mapper.Map<AppUser, AppUserViewModel>(createdUser);
                     return createdUserView;
-;
+                    ;
                 }
                 else
                 {
@@ -205,7 +205,7 @@ namespace LotteryManagement.Controllers
 
                 throw new DbUpdateConcurrencyException("Lỗi hệ thống!");
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
                 throw new Exception();
@@ -218,13 +218,14 @@ namespace LotteryManagement.Controllers
         public async Task<ActionResult<ResponseResult>> DeleteAppUser(string id)
         {
             var appUser = await _context.AppUsers.FindAsync(id);
-
+            var wallet = await _context.Wallets.FindAsync(appUser.WalletId);
             if (appUser == null)
             {
                 return NotFound();
             }
 
             _context.AppUsers.Remove(appUser);
+            _context.Wallets.Remove(wallet);
             await _context.SaveChangesAsync();
 
             return new ResponseResult("Xóa tài khoản thành công!");

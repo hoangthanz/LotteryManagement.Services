@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LotteryManagement.Data.EF.Migrations
 {
     [DbContext(typeof(LotteryManageDbContext))]
-    [Migration("20200524082316_initialize")]
+    [Migration("20200524091852_initialize")]
     partial class initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
