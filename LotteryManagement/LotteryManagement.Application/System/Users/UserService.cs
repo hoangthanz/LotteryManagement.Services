@@ -1,7 +1,12 @@
-﻿using LotteryManagement.Application.ViewModels.Users;
+﻿using AutoMapper;
+using LotteryManagement.Application.ViewModels;
+using LotteryManagement.Application.ViewModels.Users;
 using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
+using LotteryManagement.Data.Enums;
+using LotteryManagement.Utilities.Helpers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -87,7 +92,10 @@ namespace LotteryManagement.Application.System.Users
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<bool> Register(RegisterRequest request)
+
+        // Đăng ký thường không qua tài khoản nào
+
+        public async Task<bool> Register(AppUserViewModel request)
         {
             var user = new AppUser()
             {
@@ -96,16 +104,68 @@ namespace LotteryManagement.Application.System.Users
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 UserName = request.UserName,
-                PhoneNumber = request.PhoneNumber
+                PhoneNumber = request.PhoneNumber,
+                Avatar = request.Avatar,
+                NickName = request.NickName,
+                TransactionPassword = request.TransactionPassword,
+                Id = Guid.NewGuid()
             };
+
+            if (!string.IsNullOrEmpty(request.RootUserId))
+            {
+                // generate link ref
+                var rootUser = _context.AppUsers.Where(x => x.Id.ToString() == request.RootUserId).FirstOrDefault();
+                if (rootUser != null)
+                {
+                    user.RootUserId = rootUser.Id;
+                    user.RefRegisterLink = "/api/Users/register/" + rootUser.Id.ToString();
+                }
+            }
+            // create wallet
+            var wallet = new Wallet
+            {
+                DateCreated = DateTime.Now,
+                Coin = 0,
+                PendingCoin = 0,
+                PromotionCoin = 0,
+                Status = Status.Active,
+                WalletId = TextHelper.RandomString(10),
+                Id = Guid.NewGuid().ToString(),
+                UserId = ""
+            };
+
+            _context.Wallets.Add(wallet);
+
+            await _context.SaveChangesAsync();
+            var newWallet = _context.Wallets.Where(x => string.IsNullOrEmpty(x.UserId)).FirstOrDefault();
+
+            user.WalletId = newWallet.WalletId;
+
             var result = await _userManager.CreateAsync(user, request.Password);
+
             if (result.Succeeded)
             {
+
+                newWallet.UserId = user.Id.ToString();
+
+                await _context.SaveChangesAsync();
+
+                var createdUser = await _context.AppUsers.Where(x => x.Id == user.Id).FirstOrDefaultAsync();
+
+                var createdUserView = Mapper.Map<AppUser, AppUserViewModel>(createdUser);
                 return true;
             }
-            return false;
-        }
+            else
+            {
+                _context.Wallets.Remove(newWallet);
+                await _context.SaveChangesAsync();
+                string error = "";
+                foreach (var e in result.Errors)
+                    error += e.Description;
+                return false;
+            }
 
+        }
 
     }
 }

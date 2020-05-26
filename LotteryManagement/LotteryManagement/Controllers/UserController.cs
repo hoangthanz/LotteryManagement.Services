@@ -1,4 +1,5 @@
 ﻿using LotteryManagement.Application.System.Users;
+using LotteryManagement.Application.ViewModels;
 using LotteryManagement.Application.ViewModels.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,7 @@ namespace LotteryManagement.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromForm]RegisterRequest request)
+        public async Task<IActionResult> Register([FromForm]AppUserViewModel request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -47,6 +48,24 @@ namespace LotteryManagement.Controllers
             }
             return Ok();
         }
+
+        [HttpPost("register/{id}")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register([FromForm]AppUserViewModel request,string id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            request.RootUserId = id;
+
+            var result = await _userService.Register(request);
+            if (!result)
+            {
+                return BadRequest("Register is unsuccessful.");
+            }
+            return Ok();
+        }
+
 
     }
 }

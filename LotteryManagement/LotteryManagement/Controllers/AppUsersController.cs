@@ -25,7 +25,6 @@ namespace LotteryManagement.Controllers
         public AppUsersController(
             LotteryManageDbContext context,
             UserManager<AppUser> userManager
-
         )
         {
             _context = context;
