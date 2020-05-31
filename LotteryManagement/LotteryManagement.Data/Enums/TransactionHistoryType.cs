@@ -12,5 +12,9 @@ namespace LotteryManagement.Data.Enums
         ToReward,
         [Description("Rút tiền")]
         Withdraw,
+        [Description("Rút tiền và nạp")]
+        PayInAndWithdraw,
+        [Description("Đặt cược và trao thưởng")]
+        ToBetAndToReward,
     }
 }

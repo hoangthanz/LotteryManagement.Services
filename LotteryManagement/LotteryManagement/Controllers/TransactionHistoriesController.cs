@@ -1,7 +1,11 @@
-﻿using LotteryManagement.Data.EF;
+﻿using AutoMapper;
+using LotteryManagement.Application.ViewModels;
+using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
+using LotteryManagement.Data.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,6 +43,68 @@ namespace LotteryManagement.Controllers
 
             return transactionHistory;
         }
+
+        [HttpGet("/condition")]
+        public async Task<ActionResult<IEnumerable<TransactionHistoryViewModel>>> GetTransactionHistoriesByCondition(int? transactionType = null, int? billStatus = null)
+        {
+            try
+            {
+                var transactionHistory = _context.TransactionHistories.Where(x => x.Status == Status.Active).ToList();
+                var transactionHistoryViewModel = Mapper.Map<List<TransactionHistory>, List<TransactionHistoryViewModel>>(transactionHistory);
+
+                foreach (var item in transactionHistoryViewModel)
+                {
+                    var user = await _context.AppUsers.Where(x => x.Id == Guid.Parse(item.UserId)).FirstOrDefaultAsync();
+                    var userView = Mapper.Map<AppUser, AppUserViewModel>(user);
+                    item.AppUser = userView;
+                }
+                if (transactionType != null)
+                {
+                    TransactionHistoryType transactionT = (TransactionHistoryType)transactionType;
+                    if (transactionT == TransactionHistoryType.PayInAndWithdraw)
+                    {
+                        transactionHistoryViewModel = transactionHistoryViewModel.Where(x => x.TransactionHistoryType == TransactionHistoryType.PayIn || x.TransactionHistoryType == TransactionHistoryType.Withdraw).ToList();
+                    }
+                    else
+                    {
+                        if(transactionT == TransactionHistoryType.ToBetAndToReward)
+                        {
+                            transactionHistoryViewModel = transactionHistoryViewModel.Where(x => x.TransactionHistoryType == TransactionHistoryType.ToBet || x.TransactionHistoryType == TransactionHistoryType.ToReward).ToList();
+                        }
+                        else
+                        {
+                            transactionHistoryViewModel = transactionHistoryViewModel.Where(x => x.TransactionHistoryType == transactionT).ToList();
+                        }
+                       
+                    }
+
+                }
+
+                if (billStatus != null)
+                {
+                    BillStatus billS = (BillStatus)billStatus;
+                    if(billS == BillStatus.CompletedAndCancelled)
+                    {
+                        transactionHistoryViewModel = transactionHistoryViewModel.Where(x => x.BillStatus == BillStatus.Completed || x.BillStatus == BillStatus.Cancelled).ToList();
+                    }
+                    else
+                    {
+                        transactionHistoryViewModel = transactionHistoryViewModel.Where(x => x.BillStatus == billS).ToList();
+                    }
+                    
+                }
+
+
+
+                return transactionHistoryViewModel;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
+        }
+
 
         // PUT: api/TransactionHistories/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -118,5 +184,7 @@ namespace LotteryManagement.Controllers
         {
             return _context.TransactionHistories.Any(e => e.Id == id);
         }
+
+
     }
 }

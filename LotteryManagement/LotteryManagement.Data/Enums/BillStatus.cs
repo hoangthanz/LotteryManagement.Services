@@ -9,6 +9,8 @@ namespace LotteryManagement.Data.Enums
         [Description("Hủy")]
         Cancelled,
         [Description("Hoàn thành")]
-        Completed
+        Completed,
+        [Description("Hoàn thành và hủy")]
+        CompletedAndCancelled
     }
 }

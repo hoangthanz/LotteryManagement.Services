@@ -85,8 +85,7 @@ namespace LotteryManagement.Controllers
         }
 
         // PUT: api/Transactions/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTransaction(string id, Transaction transaction)
         {
@@ -214,7 +213,7 @@ namespace LotteryManagement.Controllers
                 {
                     Id = Guid.NewGuid().ToString(),
                     UserId = wallet.UserId,
-                    BillStatus = BillStatus.Completed,
+                    BillStatus = tran.BillStatus,
                     Coin = Math.Abs(transaction.Coin),
                     DateCreated = DateTime.Now,
                     Status = Status.Active,
