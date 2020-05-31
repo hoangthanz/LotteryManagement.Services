@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LotteryManagement.Data.EF.Migrations
 {
-    public partial class initialize : Migration
+    public partial class initilize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -460,10 +460,6 @@ namespace LotteryManagement.Data.EF.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    hasRead = table.Column<bool>(nullable: false),
-                    hasCreate = table.Column<bool>(nullable: false),
-                    hasUpdate = table.Column<bool>(nullable: false),
-                    hasDelete = table.Column<bool>(nullable: false),
                     FunctionId = table.Column<string>(nullable: false),
                     UserId = table.Column<Guid>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),

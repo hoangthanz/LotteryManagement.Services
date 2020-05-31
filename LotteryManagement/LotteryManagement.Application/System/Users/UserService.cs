@@ -60,24 +60,18 @@ namespace LotteryManagement.Application.System.Users
                        {
                            f.Name,
                            f.Code,
-                           p.hasRead,
-                           p.hasCreate,
-                           p.hasUpdate,
-                           p.hasDelete
                        }).ToList();
 
-            //var claims = new[]
-            //{
-            //    new Claim("Email",user.Email),
-            //    new Claim("Name",user.FirstName),
-            //    new Claim("Permission", string.Join(";",per)),
-            //};
 
             var claims = new[]
             {
                 new Claim("Email",user.Email),
                 new Claim("Name",user.FirstName),
+                new Claim("PhoneNumber", user.PhoneNumber),
+                new Claim("UserName", user.UserName),
+                new Claim("Id", user.Id.ToString()),
                 new Claim("Permission", per[0].Code),
+                new Claim("TestPermission", per.ToList().ToString()),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
@@ -92,6 +86,39 @@ namespace LotteryManagement.Application.System.Users
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+
+        public async Task<string> AuthencateForClient(LoginRequest request)
+        {
+            var user = await _userManager.FindByNameAsync(request.UserName);
+            if (user == null) return null;
+
+            var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
+            if (!result.Succeeded)
+            {
+                return null;
+            }
+
+
+            var claims = new[]
+            {
+                new Claim("Email",user.Email),
+                new Claim("Name",user.FirstName),
+                new Claim("PhoneNumber", user.PhoneNumber),
+                new Claim("UserName", user.UserName),
+                new Claim("Id", user.Id.ToString())
+            };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(_config["Tokens:Issuer"],
+                _config["Tokens:Issuer"],
+                claims,
+                expires: DateTime.Now.AddMinutes(10),
+                signingCredentials: creds);
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
 
         // Đăng ký thường không qua tài khoản nào
 

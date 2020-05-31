@@ -4,15 +4,11 @@ namespace LotteryManagement.Data.Enums
 {
     public enum BillStatus
     {
-        [Description("New bill")]
-        New,
-        [Description("In Progress")]
+        [Description("Đang xử lý")]
         InProgress,
-        [Description("Returned")]
-        Returned,
-        [Description("Cancelled")]
+        [Description("Hủy")]
         Cancelled,
-        [Description("Completed")]
+        [Description("Hoàn thành")]
         Completed
     }
 }

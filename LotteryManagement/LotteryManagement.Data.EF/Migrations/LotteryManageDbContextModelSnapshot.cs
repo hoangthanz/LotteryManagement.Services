@@ -537,18 +537,6 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("hasCreate")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("hasDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("hasRead")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("hasUpdate")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FunctionId");

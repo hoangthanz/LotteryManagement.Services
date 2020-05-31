@@ -1,6 +1,7 @@
 ﻿using LotteryManagement.Application.System.Users;
 using LotteryManagement.Application.ViewModels;
 using LotteryManagement.Application.ViewModels.Users;
+using LotteryManagement.Utilities.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ namespace LotteryManagement.Controllers
             var resultToken = await _userService.Authencate(request);
             if (string.IsNullOrEmpty(resultToken))
             {
-                return BadRequest("Username or password is incorrect.");
+                return BadRequest(new ResponseResult("Tên đăng nhập hoặc mật khẩu không đúng!"));
             }
             return Ok(new { token = resultToken });
         }

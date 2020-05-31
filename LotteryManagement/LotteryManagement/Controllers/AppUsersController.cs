@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using LotteryManagement.Application.ViewModels;
+using LotteryManagement.Application.ViewModels.Users;
 using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
 using LotteryManagement.Data.Enums;
 using LotteryManagement.Utilities.Dtos;
 using LotteryManagement.Utilities.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,14 +23,17 @@ namespace LotteryManagement.Controllers
     {
         private readonly LotteryManageDbContext _context;
         private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
         public AppUsersController(
             LotteryManageDbContext context,
-            UserManager<AppUser> userManager
+            UserManager<AppUser> userManager,
+            SignInManager<AppUser> signInManager
         )
         {
             _context = context;
             _userManager = userManager;
+            _signInManager = signInManager;
 
         }
 
@@ -213,10 +218,11 @@ namespace LotteryManagement.Controllers
         public async Task<ActionResult<ResponseResult>> DeleteAppUser(string id)
         {
             var appUser = await _context.AppUsers.FindAsync(id);
+
             var wallet = await _context.Wallets.FindAsync(appUser.WalletId);
             if (appUser == null)
             {
-                return NotFound();
+                return BadRequest(new ResponseResult("Không tìm thấy tài khoản cần xóa!"));
             }
 
             _context.AppUsers.Remove(appUser);
@@ -234,6 +240,89 @@ namespace LotteryManagement.Controllers
         private bool EmailExits(string email)
         {
             return _context.AppUsers.Any(x => x.Email == email);
+        }
+
+        [HttpPost("change-password/{id}")]
+        public async Task<ActionResult<ResponseResult>> ChangePassword(string id, ChangePassword change)
+        {
+            try
+            {
+                var appUser = await _context.AppUsers.FindAsync(Guid.Parse(id));
+                if (appUser == null)
+                {
+                    return BadRequest(new ResponseResult("Không tìm thấy tài khoản cần đổi mật khẩu!"));
+                }
+
+                if (change.ConfirmNewPassword != change.NewPassword)
+                {
+                    return BadRequest(new ResponseResult("Mật khẩu xác nhận không trùng khớp!"));
+                }
+
+                var result = await _signInManager.PasswordSignInAsync(appUser, change.Password, false, false);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(new ResponseResult("Sai mật khẩu tài khoản!"));
+                }
+
+
+                var newPassword = _userManager.PasswordHasher.HashPassword(appUser, change.NewPassword);
+                appUser.PasswordHash = newPassword;
+                var res = await _userManager.UpdateAsync(appUser);
+
+                return new ResponseResult("Đổi mật khẩu tài khoản thành công!");
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+
+                throw new DbUpdateConcurrencyException("Lỗi hệ thống!");
+            }
+            catch (Exception)
+            {
+
+                throw new Exception();
+            }
+
+        }
+
+
+        [HttpPost("change-payment-password/{id}")]
+        public async Task<ActionResult<ResponseResult>> ChangePPaymentPassword(string id, ChangePaymentPassword change)
+        {
+            try
+            {
+                var appUser = await _context.AppUsers.FindAsync(Guid.Parse(id));
+                if (appUser == null)
+                {
+                    return BadRequest(new ResponseResult("Không tìm thấy tài khoản cần đổi mật khẩu!"));
+                }
+
+                if (change.ConfirmNewPaymentPasswork != change.NewPaymentPasswork)
+                {
+                    return BadRequest(new ResponseResult("Mật khẩu tài khoản xác nhận không trùng khớp!"));
+                }
+
+                if(appUser.TransactionPassword != change.PaymentPasswork)
+                {
+                    return BadRequest(new ResponseResult("Mật khẩu thanh toán xác nhận không trùng khớp!"));
+                }
+
+
+                appUser.TransactionPassword = change.NewPaymentPasswork;
+                await _context.SaveChangesAsync();
+
+                return new ResponseResult("Đổi mật khẩu thanh toán thành công!");
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+
+                throw new DbUpdateConcurrencyException("Lỗi hệ thống!");
+            }
+            catch (Exception)
+            {
+
+                throw new Exception();
+            }
+
         }
     }
 }

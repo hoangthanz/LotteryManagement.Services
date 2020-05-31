@@ -10,6 +10,8 @@ namespace LotteryManagement.Application.System.Users
 
         Task<string> Authencate(LoginRequest request);
 
+        Task<string> AuthencateForClient(LoginRequest request);
+
         Task<bool> Register(AppUserViewModel request);
 
     }

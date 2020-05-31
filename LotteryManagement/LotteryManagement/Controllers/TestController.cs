@@ -42,6 +42,20 @@ namespace LotteryManagement.Controllers
                     List<Function> functions = new List<Function>()
                     {
                         new Function(){ Id = TextHelper.RandomString(10, false), Name = "Điều chỉnh tài khoản", Code = "Admin", Status = Status.Active},
+                        new Function(){ Id = TextHelper.RandomString(10, false), Name = "", Code = "Player", Status = Status.Active},
+
+                        new Function(){ Id = TextHelper.RandomString(10, false), Name = "", Code = "ProfitPercent.Read", Status = Status.Active},
+                        new Function(){ Id = TextHelper.RandomString(10, false), Name = "", Code = "ProfitPercent.Write", Status = Status.Active},
+                        new Function(){ Id = TextHelper.RandomString(10, false), Name = "", Code = "ProfitPercent.Delete", Status = Status.Active},
+
+                        new Function(){ Id = TextHelper.RandomString(10, false), Name = "", Code = "Account.Read", Status = Status.Active},
+                        new Function(){ Id = TextHelper.RandomString(10, false), Name = "", Code = "Account.Write", Status = Status.Active},
+                        new Function(){ Id = TextHelper.RandomString(10, false), Name = "", Code = "Account.Delete", Status = Status.Active},
+
+                        new Function(){ Id = TextHelper.RandomString(10, false), Name = "", Code = "Transaction.Read", Status = Status.Active},
+                        new Function(){ Id = TextHelper.RandomString(10, false), Name = "", Code = "Transaction.Write", Status = Status.Active},
+                        new Function(){ Id = TextHelper.RandomString(10, false), Name = "", Code = "Transaction.Delete", Status = Status.Active},
+
                     };
 
                     //var fun = new Function() { Id = TextHelper.RandomString(10, false), Name = "Điều chỉnh tài khoản", Code = "Account", Status = Status.Active };
@@ -75,24 +89,14 @@ namespace LotteryManagement.Controllers
 
                 if (_context.Permissions.ToList().Count == 0)
                 {
-                    List<Permission> permissions = new List<Permission>()
+                    List<Permission> permissions = new List<Permission>();
+
+                    var user = _context.Users.ToList()[0];
+                    foreach (var fun in _context.Functions.ToList())
                     {
-                        new Permission()
-                        {
-                            Id = TextHelper.RandomString(30, false),
-                            DateCreated = DateTime.Now,
-                            FunctionId = _context.Functions.ToList()[0].Id,
-                            UserId = _context.AppUsers.ToList()[0].Id,
-                            hasCreate = true,
-                            hasUpdate = true,
-                            hasRead = true,
-                            hasDelete = true,
-                            Status = Status.Active
-                        }
-                    };
-
-                    
-
+                        var per = new Permission() { Id = Guid.NewGuid().ToString(), DateCreated = DateTime.Now, Status = Status.Active, UserId = user.Id ,FunctionId = fun.Id};
+                        permissions.Add(per);
+                    }
                    
                     await _context.Permissions.AddRangeAsync(permissions);
                 }

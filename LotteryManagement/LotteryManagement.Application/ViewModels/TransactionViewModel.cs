@@ -1,13 +1,11 @@
 ﻿using LotteryManagement.Data.Enums;
-using LotteryManagement.Data.Interfaces;
-using LotteryManagement.Infrastructure.SharedKernel;
 using System;
 
-namespace LotteryManagement.Data.Entities
+namespace LotteryManagement.Application.ViewModels
 {
-    public class Transaction : DomainEntity<string>, ISwitchable, IDateTracking
+    public class TransactionViewModel
     {
-
+        public string Id { get; set; }
         public string Content { get; set; }
 
         public Guid UserId { get; set; }
@@ -24,6 +22,8 @@ namespace LotteryManagement.Data.Entities
 
         public double Coin { get; set; }
 
-    
+        public bool IsVerified { get; set; }
+
+        public AppUserViewModel AppUserViewModel { get; set; }
     }
 }

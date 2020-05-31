@@ -31,6 +31,8 @@ namespace LotteryManagement.Application.AutoMapper
             CreateMap<WalletViewModel, Wallet>();
             CreateMap<TransactionHistoryViewModel, TransactionHistory>();
 
+            CreateMap<TransactionViewModel, Transaction>();
+
         }
     }
 }
