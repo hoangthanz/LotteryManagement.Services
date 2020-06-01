@@ -37,7 +37,7 @@ namespace LotteryManagement.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromForm]AppUserViewModel request)
+        public async Task<ActionResult> Register(AppUserViewModel request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -45,14 +45,14 @@ namespace LotteryManagement.Controllers
             var result = await _userService.Register(request);
             if (!result)
             {
-                return BadRequest("Register is unsuccessful.");
+                return BadRequest(new ResponseResult("Đăng ký không thành công!, yêu cầu kiểm tra lại mật khẩu và điền đầy đủ!"));
             }
             return Ok();
         }
 
         [HttpPost("register/{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Register([FromForm]AppUserViewModel request,string id)
+        public async Task<ActionResult> Register([FromForm]AppUserViewModel request,string id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

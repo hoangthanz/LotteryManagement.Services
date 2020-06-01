@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LotteryManagement.Application.ViewModels;
+using LotteryManagement.Application.ViewModels.Conditions;
 using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
 using LotteryManagement.Data.Enums;
@@ -26,11 +27,18 @@ namespace LotteryManagement.Controllers
 
         // GET: api/Transactions
         [HttpGet]
-        public async Task<ActionResult<List<TransactionViewModel>>> GetTransactions(int? transactionType = null, int? billStatus = null)
+        public async Task<ActionResult<List<TransactionViewModel>>> GetTransactions(TransactionHistoryCondition condition)
         {
             try
             {
-                var transactions = _context.Transactions.Where(x=>x.Status == Status.Active).ToList();
+                var transactions = _context.Transactions.Where(x=>x.Status == Status.Active).OrderByDescending(x => x.DateCreated).ToList();
+
+                if (condition.FromDate != null)
+                {
+                    transactions = transactions.Where(x => x.DateCreated >= condition.FromDate && x.DateCreated <= condition.ToDate).ToList();
+                }
+
+
                 var transactionsViewModel = Mapper.Map<List<Transaction>, List<TransactionViewModel>>(transactions);
 
                 foreach (var item in transactionsViewModel)
@@ -39,10 +47,10 @@ namespace LotteryManagement.Controllers
                     var userView = Mapper.Map<AppUser, AppUserViewModel>(user);
                     item.AppUserViewModel = userView;
                 }
-                if (transactionType != null)
+                if (condition.TransactionType != null)
                 {
-                    TransactionType transactionT = (TransactionType)transactionType;
-                    if((TransactionType)transactionType == TransactionType.PayInAndWithdraw) 
+                    TransactionType transactionT = (TransactionType)condition.TransactionType;
+                    if(transactionT == TransactionType.PayInAndWithdraw) 
                     {
                         transactionsViewModel = transactionsViewModel.Where(x => x.TransactionType == TransactionType.PayIn || x.TransactionType == TransactionType.Withdraw).ToList();
                     }
@@ -53,9 +61,9 @@ namespace LotteryManagement.Controllers
 
                 }
 
-                if(billStatus != null)
+                if(condition.BillStatus != null)
                 {
-                    BillStatus billS = (BillStatus)billStatus;
+                    BillStatus billS = (BillStatus)condition.BillStatus;
                     transactionsViewModel = transactionsViewModel.Where(x => x.BillStatus == billS).ToList();
                 }
 

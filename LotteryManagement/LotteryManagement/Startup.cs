@@ -168,7 +168,7 @@ namespace LotteryManagement
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MamEdu API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Lottery API V1");
                 c.RoutePrefix = string.Empty;
             });
 
