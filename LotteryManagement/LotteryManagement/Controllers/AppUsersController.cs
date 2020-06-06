@@ -4,9 +4,10 @@ using LotteryManagement.Application.ViewModels.Users;
 using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
 using LotteryManagement.Data.Enums;
+using LotteryManagement.Utilities.Constants;
 using LotteryManagement.Utilities.Dtos;
 using LotteryManagement.Utilities.Helpers;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+
 
 namespace LotteryManagement.Controllers
 {
@@ -24,16 +27,18 @@ namespace LotteryManagement.Controllers
         private readonly LotteryManageDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public AppUsersController(
             LotteryManageDbContext context,
             UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager
+            SignInManager<AppUser> signInManager,
+            IHttpContextAccessor httpContextAccessor
         )
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _httpContextAccessor = httpContextAccessor;
 
         }
 
@@ -59,6 +64,14 @@ namespace LotteryManagement.Controllers
             }
 
             return appUser;
+        }
+
+
+        [HttpGet("/test-host")]
+        public async Task<ActionResult<string>> GetAppUserx()
+        {
+
+            return _httpContextAccessor.HttpContext.Request.Host.Value;
         }
 
         // PUT: api/AppUsers/5
@@ -148,7 +161,7 @@ namespace LotteryManagement.Controllers
                     if (rootUser != null)
                     {
                         user.RootUserId = rootUser.Id;
-                        user.RefRegisterLink = "/api/Users/register/" + rootUser.Id.ToString();
+                        user.RefRegisterLink = DomainConsts.LotteryDomain + "/api/Users/register/" + user.Id.ToString();
                     }
                 }
 

@@ -4,11 +4,14 @@ using LotteryManagement.Application.ViewModels.Users;
 using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
 using LotteryManagement.Data.Enums;
+using LotteryManagement.Utilities.Constants;
 using LotteryManagement.Utilities.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -25,19 +28,23 @@ namespace LotteryManagement.Application.System.Users
         private readonly RoleManager<AppRole> _roleManager;
         private readonly LotteryManageDbContext _context;
         private readonly IConfiguration _config;
-
+        private readonly IHttpContextAccessor _httpContextAccessor;
         public UserService(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             RoleManager<AppRole> roleManager,
             IConfiguration config,
-            LotteryManageDbContext context)
+            LotteryManageDbContext context,
+            IHttpContextAccessor httpContextAccessor
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _config = config;
             _context = context;
+
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<string> Authencate(LoginRequest request)
@@ -66,11 +73,12 @@ namespace LotteryManagement.Application.System.Users
             var claims = new[]
             {
                 new Claim("Email",user.Email),
-                new Claim("Name",user.FirstName),
+                new Claim("Name",(!string.IsNullOrEmpty(user.FirstName) || !string.IsNullOrEmpty(user.LastName))?user.FirstName + " " + user.LastName : ""),
                 new Claim("PhoneNumber", user.PhoneNumber),
                 new Claim("UserName", user.UserName),
                 new Claim("Id", user.Id.ToString()),
                 new Claim("Permission", per[0].Code),
+                new Claim("RefLink", user.RefRegisterLink),
                 new Claim("TestPermission", per.ToList().ToString()),
             };
 
@@ -98,14 +106,17 @@ namespace LotteryManagement.Application.System.Users
                 return null;
             }
 
+            var wallet = _context.Wallets.Where(x => x.WalletId == user.WalletId).FirstOrDefault();
+      
 
             var claims = new[]
             {
                 new Claim("Email",user.Email),
-                new Claim("Name",user.FirstName),
+                new Claim("Name",(!string.IsNullOrEmpty(user.FirstName) || !string.IsNullOrEmpty(user.LastName))?user.FirstName + " " + user.LastName : ""),
                 new Claim("PhoneNumber", user.PhoneNumber),
                 new Claim("UserName", user.UserName),
-                new Claim("Id", user.Id.ToString())
+                new Claim("Id", user.Id.ToString()),
+                new Claim("Wallet", JsonConvert.SerializeObject(wallet)),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
@@ -128,8 +139,8 @@ namespace LotteryManagement.Application.System.Users
             {
                 DateOfBirth = request.DateOfBirth,
                 Email = request.Email,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
+                FirstName = (string.IsNullOrEmpty(request.FirstName))? request.FirstName: "" ,
+                LastName = (string.IsNullOrEmpty(request.LastName)) ? request.LastName : "",
                 UserName = request.UserName,
                 PhoneNumber = request.PhoneNumber,
                 Avatar = request.Avatar,
@@ -145,7 +156,7 @@ namespace LotteryManagement.Application.System.Users
                 if (rootUser != null)
                 {
                     user.RootUserId = rootUser.Id;
-                    user.RefRegisterLink = "/api/Users/register/" + rootUser.Id.ToString();
+                    user.RefRegisterLink = DomainConsts.LotteryDomain + "/api/Users/register/" + user.Id.ToString();
                 }
             }
             // create wallet
@@ -164,6 +175,7 @@ namespace LotteryManagement.Application.System.Users
             _context.Wallets.Add(wallet);
 
             await _context.SaveChangesAsync();
+
             var newWallet = _context.Wallets.Where(x => string.IsNullOrEmpty(x.UserId)).FirstOrDefault();
 
             user.WalletId = newWallet.WalletId;

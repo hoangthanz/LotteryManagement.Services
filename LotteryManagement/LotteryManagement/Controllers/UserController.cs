@@ -35,6 +35,21 @@ namespace LotteryManagement.Controllers
         }
 
 
+        [HttpPost("authenticate-for-client")]
+        [AllowAnonymous]
+        public async Task<IActionResult> AuthenticateClient(LoginRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var resultToken = await _userService.AuthencateForClient(request);
+            if (string.IsNullOrEmpty(resultToken))
+            {
+                return BadRequest(new ResponseResult("Tên đăng nhập hoặc mật khẩu không đúng!"));
+            }
+            return Ok(new { token = resultToken });
+        }
+
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<ActionResult> Register(AppUserViewModel request)
