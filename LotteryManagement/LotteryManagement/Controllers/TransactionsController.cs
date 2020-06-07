@@ -25,8 +25,8 @@ namespace LotteryManagement.Controllers
             _context = context;
         }
 
-        // GET: api/Transactions
-        [HttpGet]
+        // POST: api/Transactions
+        [HttpPost("condition")]
         public async Task<ActionResult<List<TransactionViewModel>>> GetTransactions(TransactionHistoryCondition condition)
         {
             try

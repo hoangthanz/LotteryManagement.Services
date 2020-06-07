@@ -25,26 +25,20 @@ namespace LotteryManagement.Application.System.Users
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly RoleManager<AppRole> _roleManager;
         private readonly LotteryManageDbContext _context;
         private readonly IConfiguration _config;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+
         public UserService(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            RoleManager<AppRole> roleManager,
             IConfiguration config,
-            LotteryManageDbContext context,
-            IHttpContextAccessor httpContextAccessor
+            LotteryManageDbContext context
             )
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _roleManager = roleManager;
             _config = config;
             _context = context;
-
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<string> Authencate(LoginRequest request)

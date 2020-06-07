@@ -27,18 +27,15 @@ namespace LotteryManagement.Controllers
         private readonly LotteryManageDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         public AppUsersController(
             LotteryManageDbContext context,
             UserManager<AppUser> userManager,
-            SignInManager<AppUser> signInManager,
-            IHttpContextAccessor httpContextAccessor
+            SignInManager<AppUser> signInManager
         )
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
-            _httpContextAccessor = httpContextAccessor;
 
         }
 
@@ -66,13 +63,6 @@ namespace LotteryManagement.Controllers
             return appUser;
         }
 
-
-        [HttpGet("/test-host")]
-        public async Task<ActionResult<string>> GetAppUserx()
-        {
-
-            return _httpContextAccessor.HttpContext.Request.Host.Value;
-        }
 
         // PUT: api/AppUsers/5
 

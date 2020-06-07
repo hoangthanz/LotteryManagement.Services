@@ -58,7 +58,6 @@ namespace LotteryManagement
 
 
             services.AddControllers();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
 
