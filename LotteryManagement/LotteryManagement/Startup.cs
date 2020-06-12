@@ -2,13 +2,13 @@ using AutoMapper;
 using LotteryManagement.Application.Implementation;
 using LotteryManagement.Application.Interfaces;
 using LotteryManagement.Application.System.Users;
+using LotteryManagement.CronJobs;
 using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
 using LotteryManagement.Infrastructure.Interfaces;
 using LotteryManagement.Utilities.Constants;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -132,7 +133,15 @@ namespace LotteryManagement
             services.AddTransient(typeof(IRepository<,>), typeof(EFRepository<,>));
 
             services.AddTransient<IProfitPercentService, ProfitPercentService>();
-         
+
+
+            services.AddScoped<IBackUpScopedService, BackUpScopedService>();
+
+            services.AddCronJob<BackUpCronJob>(c =>
+            {
+                c.TimeZoneInfo = TimeZoneInfo.Local;
+                c.CronExpression = @"* * * * *";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

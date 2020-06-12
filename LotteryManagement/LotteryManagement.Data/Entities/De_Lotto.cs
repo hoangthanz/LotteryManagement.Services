@@ -30,5 +30,10 @@ namespace LotteryManagement.Data.Entities
         public Ticket Ticket { get; set; }
 
 
+        public bool isHead { get; set; }
+        public bool isTail { get; set; }
+
+        public string HeadValue { get; set; }
+        public string TailValue { get; set; }
     }
 }

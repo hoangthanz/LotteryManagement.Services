@@ -33,6 +33,8 @@ namespace LotteryManagement.Data.Entities
 
         public List<AppUser> RefUsers { get; set; }
 
+        public List<BankCard> BankCards { get; set; }
+
         public AppUser RootUser { get; set; }
 
         public Guid? RootUserId { get; set; }

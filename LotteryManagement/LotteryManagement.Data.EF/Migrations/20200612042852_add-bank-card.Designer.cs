@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LotteryManagement.Data.EF.Migrations
 {
     [DbContext(typeof(LotteryManageDbContext))]
-    [Migration("20200530100554_initilize")]
-    partial class initilize
+    [Migration("20200612042852_add-bank-card")]
+    partial class addbankcard
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -201,6 +201,45 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.ToTable("AppUsers");
                 });
 
+            modelBuilder.Entity("LotteryManagement.Data.Entities.BankCard", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("BankAccountNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankBranch")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FullNameOwner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("BankCards");
+                });
+
             modelBuilder.Entity("LotteryManagement.Data.Entities.Bao_Lotto", b =>
                 {
                     b.Property<string>("Id")
@@ -353,6 +392,9 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<int>("De_LottoStatus")
                         .HasColumnType("int");
 
+                    b.Property<string>("HeadValue")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("IsGoal")
                         .HasColumnType("bit");
 
@@ -364,6 +406,9 @@ namespace LotteryManagement.Data.EF.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("TailValue")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TicketId")
                         .HasColumnType("nvarchar(450)");
@@ -377,6 +422,12 @@ namespace LotteryManagement.Data.EF.Migrations
 
                     b.Property<double>("endRate")
                         .HasColumnType("float");
+
+                    b.Property<bool>("isHead")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isTail")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -516,6 +567,29 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("OperationHistories");
+                });
+
+            modelBuilder.Entity("LotteryManagement.Data.Entities.OwnerBank", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccountNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Branch")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullNameOwner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OwnerBanks");
                 });
 
             modelBuilder.Entity("LotteryManagement.Data.Entities.Permission", b =>
@@ -726,6 +800,12 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<double>("Bao_Total")
                         .HasColumnType("float");
 
+                    b.Property<double>("Cang3After")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Cang4After")
+                        .HasColumnType("float");
+
                     b.Property<double>("Cang_Total")
                         .HasColumnType("float");
 
@@ -738,14 +818,65 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("DauAfter")
+                        .HasColumnType("float");
+
+                    b.Property<double>("DeDacBietAfter")
+                        .HasColumnType("float");
+
+                    b.Property<double>("DeDauDacBietAfter")
+                        .HasColumnType("float");
+
+                    b.Property<double>("DeGiai7After")
+                        .HasColumnType("float");
+
+                    b.Property<double>("DeGiaiNhatAfter")
+                        .HasColumnType("float");
+
                     b.Property<double>("De_Total")
+                        .HasColumnType("float");
+
+                    b.Property<double>("DuoiAfter")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Lo2So1KAfter")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Lo2SoAfter")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Lo2SoDauAfter")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Lo3SoAfter")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Lo4SoAfter")
                         .HasColumnType("float");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<double>("TruotXien10After")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TruotXien4After")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TruotXien8After")
+                        .HasColumnType("float");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Xien2After")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Xien3After")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Xien4After")
+                        .HasColumnType("float");
 
                     b.Property<double>("Xien_Total")
                         .HasColumnType("float");
@@ -1030,6 +1161,15 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.HasOne("LotteryManagement.Data.Entities.AppUser", "RootUser")
                         .WithMany("RefUsers")
                         .HasForeignKey("RootUserId");
+                });
+
+            modelBuilder.Entity("LotteryManagement.Data.Entities.BankCard", b =>
+                {
+                    b.HasOne("LotteryManagement.Data.Entities.AppUser", "AppUser")
+                        .WithMany("BankCards")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("LotteryManagement.Data.Entities.Bao_Lotto", b =>

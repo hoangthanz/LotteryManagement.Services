@@ -1,13 +1,14 @@
-﻿using LotteryManagement.Data.Enums;
-using LotteryManagement.Data.Interfaces;
-using LotteryManagement.Infrastructure.SharedKernel;
+﻿using LotteryManagement.Data.Entities;
+using LotteryManagement.Data.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace LotteryManagement.Data.Entities
+namespace LotteryManagement.Application.ViewModels
 {
-    public class Ticket : DomainEntity<string>, ISwitchable, IDateTracking
+    public class TicketViewModel
     {
+        public string Id { get; set; }
+
         public string Content { get; set; }
         public double De_Total { get; set; }
 
@@ -20,10 +21,10 @@ namespace LotteryManagement.Data.Entities
         public DateTime DateCreated { set; get; }
         public DateTime? DateModified { set; get; }
 
-        
+
 
         public Guid UserId { get; set; }
-        public AppUser AppUser { get; set; }
+        public AppUserViewModel AppUser { get; set; }
 
         public List<Bao_Lotto> Bao_Lottos { get; set; }
         public List<Cang_Lotto> Cang_Lottos { get; set; }
@@ -60,8 +61,5 @@ namespace LotteryManagement.Data.Entities
         public double TruotXien4After { get; set; }
         public double TruotXien8After { get; set; }
         public double TruotXien10After { get; set; }
-
-
-
     }
 }

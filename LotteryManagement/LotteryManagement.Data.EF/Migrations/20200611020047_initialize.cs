@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LotteryManagement.Data.EF.Migrations
 {
-    public partial class initilize : Migration
+    public partial class initialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -381,6 +381,31 @@ namespace LotteryManagement.Data.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BankCards",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    BankName = table.Column<string>(nullable: false),
+                    BankBranch = table.Column<string>(nullable: false),
+                    FullNameOwner = table.Column<string>(nullable: true),
+                    BankAccountNumber = table.Column<string>(nullable: false),
+                    DateCreated = table.Column<DateTime>(nullable: false),
+                    DateModified = table.Column<DateTime>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    UserId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BankCards", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BankCards_AppUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AppUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Messages",
                 columns: table => new
                 {
@@ -416,7 +441,26 @@ namespace LotteryManagement.Data.EF.Migrations
                     Status = table.Column<int>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true),
-                    UserId = table.Column<Guid>(nullable: false)
+                    UserId = table.Column<Guid>(nullable: false),
+                    Lo2SoAfter = table.Column<double>(nullable: false),
+                    Lo2SoDauAfter = table.Column<double>(nullable: false),
+                    Lo2So1KAfter = table.Column<double>(nullable: false),
+                    Lo3SoAfter = table.Column<double>(nullable: false),
+                    Lo4SoAfter = table.Column<double>(nullable: false),
+                    Xien2After = table.Column<double>(nullable: false),
+                    Xien3After = table.Column<double>(nullable: false),
+                    Xien4After = table.Column<double>(nullable: false),
+                    DeDacBietAfter = table.Column<double>(nullable: false),
+                    DeDauDacBietAfter = table.Column<double>(nullable: false),
+                    DeGiai7After = table.Column<double>(nullable: false),
+                    DeGiaiNhatAfter = table.Column<double>(nullable: false),
+                    DauAfter = table.Column<double>(nullable: false),
+                    DuoiAfter = table.Column<double>(nullable: false),
+                    Cang3After = table.Column<double>(nullable: false),
+                    Cang4After = table.Column<double>(nullable: false),
+                    TruotXien4After = table.Column<double>(nullable: false),
+                    TruotXien8After = table.Column<double>(nullable: false),
+                    TruotXien10After = table.Column<double>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -557,7 +601,11 @@ namespace LotteryManagement.Data.EF.Migrations
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    TicketId = table.Column<string>(nullable: true)
+                    TicketId = table.Column<string>(nullable: true),
+                    isHead = table.Column<bool>(nullable: false),
+                    isTail = table.Column<bool>(nullable: false),
+                    HeadValue = table.Column<string>(nullable: true),
+                    TailValue = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -613,6 +661,11 @@ namespace LotteryManagement.Data.EF.Migrations
                 name: "IX_AppUsers_RootUserId",
                 table: "AppUsers",
                 column: "RootUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BankCards_UserId",
+                table: "BankCards",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bao_Lottos_TicketId",
@@ -685,6 +738,9 @@ namespace LotteryManagement.Data.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "AppUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "BankCards");
 
             migrationBuilder.DropTable(
                 name: "Bao_Lottos");

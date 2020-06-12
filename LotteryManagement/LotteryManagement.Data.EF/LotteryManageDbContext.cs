@@ -1,9 +1,12 @@
 ﻿using LotteryManagement.Data.Configurations;
 using LotteryManagement.Data.Entities;
+using LotteryManagement.Data.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
+using System.Linq;
 
 namespace LotteryManagement.Data.EF
 {
@@ -48,6 +51,7 @@ namespace LotteryManagement.Data.EF
             builder.ApplyConfiguration(new TransactionHistoryConfiguration());
             builder.ApplyConfiguration(new WalletConfiguration());
             builder.ApplyConfiguration(new TransactionConfiguration());
+            builder.ApplyConfiguration(new BankCardConfiguration());
 
             builder.Entity<IdentityUserClaim<Guid>>().ToTable("AppUserClaims");
             builder.Entity<IdentityUserRole<Guid>>().ToTable("AppUserRoles").HasKey(x => new { x.UserId, x.RoleId });
@@ -90,7 +94,28 @@ namespace LotteryManagement.Data.EF
 
         public DbSet<Xien_Lotto> Xien_Lottos { get; set; }
 
+        public DbSet<BankCard> BankCards { get; set; }
 
-       
+        public DbSet<OwnerBank> OwnerBanks { get; set; }
+
+        public override int SaveChanges()
+        {
+            var modified = ChangeTracker.Entries().Where(e => e.State == EntityState.Modified || e.State == EntityState.Added);
+
+            foreach (EntityEntry item in modified)
+            {
+                var changedOrAddedItem = item.Entity as IDateTracking;
+                if (changedOrAddedItem != null)
+                {
+                    if (item.State == EntityState.Added)
+                    {
+                        changedOrAddedItem.DateCreated = DateTime.Now;
+                    }
+                    changedOrAddedItem.DateModified = DateTime.Now;
+                }
+            }
+            return base.SaveChanges();
+        }
+
     }
 }

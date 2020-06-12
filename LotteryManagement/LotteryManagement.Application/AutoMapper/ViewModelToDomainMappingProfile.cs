@@ -33,6 +33,10 @@ namespace LotteryManagement.Application.AutoMapper
 
             CreateMap<TransactionViewModel, Transaction>();
 
+            CreateMap<BankCardViewModel, BankCard>();
+
+            CreateMap<TicketViewModel, Ticket>();
+
         }
     }
 }
