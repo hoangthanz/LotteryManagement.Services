@@ -47,7 +47,6 @@ namespace LotteryManagement.Controllers
         }
 
 
-
         // GET: api/BankCards/5
         [HttpGet("get-cards-by-user/{id}")]
         public async Task<ActionResult<List<BankCardViewModel>>> GetBankCardByUser(string id)
@@ -83,6 +82,40 @@ namespace LotteryManagement.Controllers
                 return BadRequest();
             }
 
+            var bankCardList = _context.BankCards.Where(x => x.UserId.ToString() == bankCardViewModel.UserId).ToList();
+
+            // Kiểm tra có trùng tên với tối đa 5 tài khoản và phải khác số tài khoản
+
+            if (bankCardList.Count >= 5)
+            {
+                return BadRequest(new ResponseResult("Bạn đã liên kết tối đa số tài khoản là 5 rồi!"));
+            }
+
+            foreach (var bank in bankCardList)
+            {
+                if (bank.FullNameOwner != bankCardViewModel.FullNameOwner)
+                {
+                    return BadRequest(new ResponseResult("Tên của chủ tài khoản phải trùng với những thẻ còn lại!"));
+                }
+
+                if (bank.BankAccountNumber == bankCardViewModel.BankAccountNumber)
+                {
+                    return BadRequest(new ResponseResult("Số tài khoản đã tồn tại!"));
+                }
+            }
+
+            // Kiểm tra toàn bộ tài khoản còn lại xem có trùng stk
+            var otherBank = _context.BankCards.Where(x => x.UserId.ToString() != bankCardViewModel.UserId).ToList();
+
+            foreach (var item in otherBank)
+            {
+                if (item.BankAccountNumber == bankCardViewModel.BankAccountNumber)
+                {
+                    return BadRequest(new ResponseResult("Số tài khoản đã tồn tại!"));
+                }
+            }
+
+
             var bankCard = _context.BankCards.Find(bankCardViewModel.Id);
             bankCard.BankAccountNumber = bankCardViewModel.BankAccountNumber;
             bankCard.BankBranch = bankCardViewModel.BankBranch;
@@ -102,7 +135,7 @@ namespace LotteryManagement.Controllers
             {
                 if (!BankCardExists(id))
                 {
-                    return NotFound();
+                    return BadRequest(new ResponseResult("Không tìm thấy thông tin thẻ này!"));
                 }
                 else
                 {
@@ -120,6 +153,43 @@ namespace LotteryManagement.Controllers
 
             try
             {
+
+                var bankCardList = _context.BankCards.Where(x => x.UserId.ToString() == input.UserId).ToList();
+
+                // Kiểm tra có trùng tên với tối đa 5 tài khoản và phải khác số tài khoản
+
+                if(bankCardList.Count >= 5)
+                {
+                    return BadRequest(new ResponseResult("Bạn đã liên kết tối đa số tài khoản là 5 rồi!"));
+                }
+
+                foreach (var bank in bankCardList)
+                {
+                    if(bank.FullNameOwner != input.FullNameOwner)
+                    {
+                        return BadRequest(new ResponseResult("Tên của chủ tài khoản phải trùng với những thẻ còn lại!"));
+                    }
+
+                    if (bank.BankAccountNumber == input.BankAccountNumber)
+                    {
+                        return BadRequest(new ResponseResult("Số tài khoản đã tồn tại!"));
+                    }
+                }
+
+                // Kiểm tra toàn bộ tài khoản còn lại xem có trùng stk
+                var otherBank = _context.BankCards.Where(x => x.UserId.ToString() != input.UserId).ToList();
+
+                foreach (var item in otherBank)
+                {
+                    if (item.BankAccountNumber == input.BankAccountNumber)
+                    {
+                        return BadRequest(new ResponseResult("Số tài khoản đã tồn tại!"));
+                    }
+                }
+
+
+
+
                 if (input.ConfirmBankAccountNumber != input.BankAccountNumber)
                 {
                     return BadRequest(new ResponseResult("Số tài khoản và xác nhận số tài khoản không trùng nhau!"));
@@ -131,6 +201,7 @@ namespace LotteryManagement.Controllers
                 {
                     return BadRequest(new ResponseResult("Mật khẩu giao dịch không đúng!"));
                 }
+
 
 
                 var bankCard = new BankCard
@@ -180,5 +251,8 @@ namespace LotteryManagement.Controllers
         {
             return _context.BankCards.Any(e => e.Id == id);
         }
+
+
+        
     }
 }

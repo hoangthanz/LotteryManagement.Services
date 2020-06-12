@@ -118,8 +118,11 @@ namespace LotteryManagement.Controllers
                 string[] deArrayBySemiColon = bettingOnDe.DeArray.Split(';');
                 string[] deArrayBySpace = bettingOnDe.DeArray.Split(' ');
 
-                
+                // loại bỏ hết dấu cách
+  
+               
 
+                var isNumeric = int.TryParse("123", out int n);
                 string x = "";
             }
             catch (DbUpdateException)
@@ -154,6 +157,10 @@ namespace LotteryManagement.Controllers
         }
 
 
+        private bool IsNumber(string str)
+        {
+            return int.TryParse("123", out int n);
+        }
 
         private bool DeFomatCheck(List<string> des)
         {
