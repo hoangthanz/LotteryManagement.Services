@@ -1,4 +1,5 @@
-﻿using LotteryManagement.Data.Enums;
+﻿using LotteryManagement.Data.Entities;
+using LotteryManagement.Data.Enums;
 using System;
 
 namespace LotteryManagement.Application.ViewModels
@@ -19,5 +20,16 @@ namespace LotteryManagement.Application.ViewModels
         public double Coin { get; set; }
 
         public AppUserViewModel AppUser { get; set; }
+
+
+        public string BankCardId { get; set; }
+
+        public BankCardViewModel BankCardViewModel { get; set; }
+
+
+        public OwnerBank OwnerBankViewModel { get; set; }
+
+        public string OwnerBankId { get; set; }
+
     }
 }

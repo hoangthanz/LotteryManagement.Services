@@ -19,5 +19,10 @@ namespace LotteryManagement.Data.Entities
         public DateTime? DateModified { set; get; }
         public Status Status { set; get; }
         public double Coin { get; set; }
+
+        public string BankCardId { get; set; }
+
+        public string OwnerBankId { get; set; }
+
     }
 }

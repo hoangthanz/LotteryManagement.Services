@@ -1,4 +1,5 @@
-﻿using LotteryManagement.Data.Enums;
+﻿using LotteryManagement.Data.Entities;
+using LotteryManagement.Data.Enums;
 using System;
 
 namespace LotteryManagement.Application.ViewModels
@@ -25,5 +26,14 @@ namespace LotteryManagement.Application.ViewModels
         public bool IsVerified { get; set; }
 
         public AppUserViewModel AppUserViewModel { get; set; }
+
+        public string BankCardId { get; set; }
+
+        public BankCardViewModel BankCardViewModel { get; set; }
+
+
+        public OwnerBank OwnerBankViewModel { get; set; }
+
+        public Guid OwnerBankId { get; set; }
     }
 }

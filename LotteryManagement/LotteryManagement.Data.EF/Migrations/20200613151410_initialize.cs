@@ -244,6 +244,21 @@ namespace LotteryManagement.Data.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "OwnerBanks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    FullNameOwner = table.Column<string>(nullable: true),
+                    Branch = table.Column<string>(nullable: true),
+                    AccountNumber = table.Column<string>(nullable: true),
+                    BankName = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OwnerBanks", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProfitPercents",
                 columns: table => new
                 {
@@ -589,23 +604,17 @@ namespace LotteryManagement.Data.EF.Migrations
                 name: "De_Lottos",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Value = table.Column<string>(nullable: false),
-                    De_LottoStatus = table.Column<int>(nullable: false),
-                    RegionStatus = table.Column<int>(nullable: false),
                     Price = table.Column<double>(nullable: false),
                     IsGoal = table.Column<bool>(nullable: true),
-                    CurrentRate = table.Column<double>(nullable: false),
-                    beginRate = table.Column<double>(nullable: false),
-                    endRate = table.Column<double>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true),
                     Status = table.Column<int>(nullable: false),
                     TicketId = table.Column<string>(nullable: true),
-                    isHead = table.Column<bool>(nullable: false),
-                    isTail = table.Column<bool>(nullable: false),
-                    HeadValue = table.Column<string>(nullable: true),
-                    TailValue = table.Column<string>(nullable: true)
+                    SpecialDeType = table.Column<int>(nullable: false),
+                    De_LottoStatus = table.Column<int>(nullable: false),
+                    RegionStatus = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -765,6 +774,9 @@ namespace LotteryManagement.Data.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "OperationHistories");
+
+            migrationBuilder.DropTable(
+                name: "OwnerBanks");
 
             migrationBuilder.DropTable(
                 name: "Permissions");

@@ -17,13 +17,6 @@ namespace LotteryManagement.Data.Entities
 
         public bool? IsGoal { get; set; }
 
-        /* Tính tỉ lệ */
-
-        public double CurrentRate { get; set; }
-        public double beginRate { get; set; }
-        public double endRate { get; set; }
-
-
         public DateTime DateCreated { set; get; }
         public DateTime? DateModified { set; get; }
         public Status Status { set; get; }

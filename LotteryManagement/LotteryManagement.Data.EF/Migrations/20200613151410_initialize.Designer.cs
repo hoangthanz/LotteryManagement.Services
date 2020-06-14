@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LotteryManagement.Data.EF.Migrations
 {
     [DbContext(typeof(LotteryManageDbContext))]
-    [Migration("20200612042852_add-bank-card")]
-    partial class addbankcard
+    [Migration("20200613151410_initialize")]
+    partial class initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -377,11 +377,9 @@ namespace LotteryManagement.Data.EF.Migrations
 
             modelBuilder.Entity("LotteryManagement.Data.Entities.De_Lotto", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<double>("CurrentRate")
-                        .HasColumnType("float");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -392,9 +390,6 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<int>("De_LottoStatus")
                         .HasColumnType("int");
 
-                    b.Property<string>("HeadValue")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<bool?>("IsGoal")
                         .HasColumnType("bit");
 
@@ -404,11 +399,11 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<int>("RegionStatus")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
+                    b.Property<int>("SpecialDeType")
                         .HasColumnType("int");
 
-                    b.Property<string>("TailValue")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("TicketId")
                         .HasColumnType("nvarchar(450)");
@@ -416,18 +411,6 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("beginRate")
-                        .HasColumnType("float");
-
-                    b.Property<double>("endRate")
-                        .HasColumnType("float");
-
-                    b.Property<bool>("isHead")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("isTail")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 

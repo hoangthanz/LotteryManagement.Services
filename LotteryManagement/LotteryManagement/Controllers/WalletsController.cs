@@ -3,6 +3,7 @@ using LotteryManagement.Application.ViewModels;
 using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
 using LotteryManagement.Data.Enums;
+using LotteryManagement.Utilities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -45,6 +46,19 @@ namespace LotteryManagement.Controllers
             return walletViews;
         }
 
+        [HttpGet("user/{id}")]
+        public async Task<ActionResult<Wallet>> GetWalletByUser(string id)
+        {
+            var wallet = await _context.Wallets.Where(x => x.UserId == id).FirstOrDefaultAsync();
+
+            if (wallet == null)
+            {
+                return BadRequest(new ResponseResult("Không tìm thấy ví!"));
+            }
+
+            return wallet;
+        }
+
         // GET: api/Wallets/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Wallet>> GetWallet(string id)
@@ -53,7 +67,7 @@ namespace LotteryManagement.Controllers
 
             if (wallet == null)
             {
-                return NotFound();
+                return BadRequest(new ResponseResult("Không tìm thấy ví!"));
             }
 
             return wallet;

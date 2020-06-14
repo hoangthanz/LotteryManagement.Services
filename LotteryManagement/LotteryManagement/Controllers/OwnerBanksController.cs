@@ -1,5 +1,6 @@
 ﻿using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
+using LotteryManagement.Utilities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -79,6 +80,11 @@ namespace LotteryManagement.Controllers
         [HttpPost]
         public async Task<ActionResult<OwnerBank>> PostOwnerBank(OwnerBank ownerBank)
         {
+            var bank = _context.OwnerBanks.Where(x => x.AccountNumber == ownerBank.AccountNumber).FirstOrDefault();
+            if(bank != null)
+            {
+                return BadRequest(new ResponseResult("Lỗi trùng số tài khoản ngân hàng!"));
+            }
             _context.OwnerBanks.Add(ownerBank);
             await _context.SaveChangesAsync();
 

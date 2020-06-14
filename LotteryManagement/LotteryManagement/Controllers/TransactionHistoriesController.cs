@@ -61,9 +61,28 @@ namespace LotteryManagement.Controllers
 
                 foreach (var item in transactionHistoryViewModel)
                 {
-                    var user = await _context.AppUsers.Where(x => x.Id == Guid.Parse(item.UserId)).FirstOrDefaultAsync();
-                    var userView = Mapper.Map<AppUser, AppUserViewModel>(user);
-                    item.AppUser = userView;
+                    var user = await _context.AppUsers.Where(x => x.Id.ToString() == item.UserId).FirstOrDefaultAsync();
+                    var banckCard = await _context.BankCards.Where(x => x.Id == item.BankCardId).FirstOrDefaultAsync();
+                    var ownerBank = await _context.OwnerBanks.Where(x => x.Id.ToString() == item.OwnerBankId).FirstOrDefaultAsync();
+
+                    if(user != null)
+                    {
+                        var userView = Mapper.Map<AppUser, AppUserViewModel>(user);
+                        item.AppUser = userView;
+                    } 
+
+                    if(banckCard != null)
+                    {
+                        var bankCardView = Mapper.Map<BankCard, BankCardViewModel>(banckCard);
+                        item.BankCardId = banckCard.Id;
+                        item.BankCardViewModel = bankCardView;
+                    }
+                    
+                    if(ownerBank != null)
+                    {
+                        item.OwnerBankId = ownerBank.Id.ToString();
+                        item.OwnerBankViewModel = ownerBank;
+                    }
                 }
                 if (condition.TransactionType != null)
                 {

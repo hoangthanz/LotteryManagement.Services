@@ -75,7 +75,7 @@ namespace LotteryManagement.Controllers
 
         // PUT: api/BankCards/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBankCard(string id, BankCardViewModel bankCardViewModel)
+        public  ActionResult PutBankCard(string id, BankCardViewModel bankCardViewModel)
         {
             if (id != bankCardViewModel.Id)
             {
@@ -105,15 +105,10 @@ namespace LotteryManagement.Controllers
             }
 
             // Kiểm tra toàn bộ tài khoản còn lại xem có trùng stk
-            var otherBank = _context.BankCards.Where(x => x.UserId.ToString() != bankCardViewModel.UserId).ToList();
-
-            foreach (var item in otherBank)
-            {
-                if (item.BankAccountNumber == bankCardViewModel.BankAccountNumber)
-                {
-                    return BadRequest(new ResponseResult("Số tài khoản đã tồn tại!"));
-                }
-            }
+            var otherBank = _context.BankCards.Where(x => x.UserId.ToString() != bankCardViewModel.UserId && x.BankAccountNumber == bankCardViewModel.BankAccountNumber).ToList();
+            if(otherBank.Count != 0)
+                return BadRequest(new ResponseResult("Số tài khoản đã tồn tại!"));
+           
 
 
             var bankCard = _context.BankCards.Find(bankCardViewModel.Id);
@@ -128,7 +123,7 @@ namespace LotteryManagement.Controllers
             {
 
                 _context.BankCards.Update(bankCard);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return Ok(new ResponseResult("Cập nhật ngân hàng thành công!"));
             }
             catch (DbUpdateConcurrencyException)
@@ -148,7 +143,7 @@ namespace LotteryManagement.Controllers
 
         // POST: api/BankCards
         [HttpPost]
-        public async Task<ActionResult<BankCardViewModel>> PostBankCard(InputBankCard input)
+        public ActionResult<object> PostBankCard(InputBankCard input)
         {
 
             try
@@ -177,15 +172,9 @@ namespace LotteryManagement.Controllers
                 }
 
                 // Kiểm tra toàn bộ tài khoản còn lại xem có trùng stk
-                var otherBank = _context.BankCards.Where(x => x.UserId.ToString() != input.UserId).ToList();
-
-                foreach (var item in otherBank)
-                {
-                    if (item.BankAccountNumber == input.BankAccountNumber)
-                    {
-                        return BadRequest(new ResponseResult("Số tài khoản đã tồn tại!"));
-                    }
-                }
+                var otherBank = _context.BankCards.Where(x => x.UserId.ToString() != input.UserId && x.BankAccountNumber == input.BankAccountNumber).ToList();
+                if (otherBank.Count != 0)
+                    return BadRequest(new ResponseResult("Số tài khoản đã tồn tại!"));
 
 
 
@@ -195,7 +184,7 @@ namespace LotteryManagement.Controllers
                     return BadRequest(new ResponseResult("Số tài khoản và xác nhận số tài khoản không trùng nhau!"));
                 }
 
-                var user = await _context.AppUsers.Where(x => x.Id.ToString() == input.UserId).FirstOrDefaultAsync();
+                var user =  _context.AppUsers.Where(x => x.Id.ToString() == input.UserId).FirstOrDefault();
 
                 if (user.TransactionPassword != input.TransactionPassword)
                 {
@@ -216,8 +205,8 @@ namespace LotteryManagement.Controllers
                     UserId = user.Id,
                 };
 
-                await _context.BankCards.AddAsync(bankCard);
-                await _context.SaveChangesAsync();
+                 _context.BankCards.Add(bankCard);
+                 _context.SaveChanges();
 
                 var bankCardViewModel = Mapper.Map<BankCard, BankCardViewModel>(bankCard);
 

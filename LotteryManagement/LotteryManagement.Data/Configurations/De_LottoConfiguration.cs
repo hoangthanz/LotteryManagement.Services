@@ -12,9 +12,6 @@ namespace LotteryManagement.Data.Configurations
             builder.HasKey(x => x.Id);
 
 
-            builder.Property(x => x.CurrentRate).IsRequired();
-            builder.Property(x => x.beginRate).IsRequired();
-            builder.Property(x => x.endRate).IsRequired();
 
             builder.Property(x => x.Value).IsRequired();
             builder.Property(x => x.De_LottoStatus).IsRequired();

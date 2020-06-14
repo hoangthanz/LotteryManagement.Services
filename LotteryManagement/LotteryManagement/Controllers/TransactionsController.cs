@@ -7,6 +7,7 @@ using LotteryManagement.Data.Enums;
 using LotteryManagement.Utilities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SQLitePCL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,8 +45,28 @@ namespace LotteryManagement.Controllers
                 foreach (var item in transactionsViewModel)
                 {
                     var user = await _context.AppUsers.Where(x => x.Id == item.UserId).FirstOrDefaultAsync();
-                    var userView = Mapper.Map<AppUser, AppUserViewModel>(user);
-                    item.AppUserViewModel = userView;
+                    var banckCard = await _context.BankCards.Where(x => x.Id == item.BankCardId).FirstOrDefaultAsync();
+                    var ownerBank = await _context.OwnerBanks.Where(x => x.Id == item.OwnerBankId).FirstOrDefaultAsync();
+
+                    if(user != null)
+                    {
+                        var userView = Mapper.Map<AppUser, AppUserViewModel>(user);
+                        item.AppUserViewModel = userView;
+                    } 
+
+                    if(banckCard != null)
+                    {
+                        var bankCardView = Mapper.Map<BankCard, BankCardViewModel>(banckCard);
+                        item.BankCardId = banckCard.Id;
+                        item.BankCardViewModel = bankCardView;
+                    }
+                    
+                    if(ownerBank != null)
+                    {
+                        item.OwnerBankId = ownerBank.Id;
+                        item.OwnerBankViewModel = ownerBank;
+                    }
+                  
                 }
                 if (condition.TransactionType != null)
                 {
@@ -127,26 +148,41 @@ namespace LotteryManagement.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Transaction>> PostTransaction(Transaction transaction)
+        public ActionResult<object> PostTransaction(Transaction transaction)
         {
-            _context.Transactions.Add(transaction);
+
             try
             {
-                await _context.SaveChangesAsync();
+       
+                if (string.IsNullOrEmpty(transaction.Content))
+                {
+                    return BadRequest(new ResponseResult("Nội dung không được để trống!"));
+                }
+                var user = _context.AppUsers.Where(x => x.Id == transaction.UserId).FirstOrDefault();
+
+                if(user == null)
+                {
+                    return BadRequest(new ResponseResult("Không tìm thấy người dùng này! Vui lòng kiểm tra lại."));
+                }
+
+                transaction.Id = Guid.NewGuid().ToString();
+                transaction.DateCreated = DateTime.Now;
+                transaction.Status = Status.Active;
+                _context.Transactions.Add(transaction);
+
+                _context.SaveChanges();
+                var transViewModel = Mapper.Map<Transaction, TransactionViewModel>(transaction);
+                return transViewModel;
+
             }
             catch (DbUpdateException)
             {
-                if (TransactionExists(transaction.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(new ResponseResult("Lỗi! "));
             }
-
-            return CreatedAtAction("GetTransaction", new { id = transaction.Id }, transaction);
+            catch (Exception e)
+            {
+                return BadRequest(new ResponseResult("Lỗi không xác định! " + e.Message  ));
+            }
         }
 
         // DELETE: api/Transactions/5
@@ -247,7 +283,7 @@ namespace LotteryManagement.Controllers
                 }
                 else
                 {
-                    throw;
+                    return BadRequest(new ResponseResult("Lỗi không xác định!"));
                 }
             }
 
