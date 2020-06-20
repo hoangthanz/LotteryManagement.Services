@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LotteryManagement.Data.EF.Migrations
 {
     [DbContext(typeof(LotteryManageDbContext))]
-    [Migration("20200613151410_initialize")]
+    [Migration("20200618121309_initialize")]
     partial class initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -248,9 +248,6 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<int>("Bao_LottoStatus")
                         .HasColumnType("int");
 
-                    b.Property<double>("CurrentRate")
-                        .HasColumnType("float");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -275,12 +272,6 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("beginRate")
-                        .HasColumnType("float");
-
-                    b.Property<double>("endRate")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -694,6 +685,9 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RegionStatus")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -876,6 +870,9 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("BankCardId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("BillStatus")
                         .HasColumnType("int");
 
@@ -890,6 +887,9 @@ namespace LotteryManagement.Data.EF.Migrations
 
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("OwnerBankId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -910,6 +910,9 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("BankCardId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("BillStatus")
                         .HasColumnType("int");
 
@@ -925,6 +928,9 @@ namespace LotteryManagement.Data.EF.Migrations
 
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("OwnerBankId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");

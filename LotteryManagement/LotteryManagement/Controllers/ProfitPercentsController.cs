@@ -1,6 +1,7 @@
 ﻿using LotteryManagement.Application.Interfaces;
 using LotteryManagement.Application.ViewModels;
 using LotteryManagement.Data.EF;
+using LotteryManagement.Data.Enums;
 using LotteryManagement.Utilities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -79,6 +80,8 @@ namespace LotteryManagement.Controllers
         [HttpPost]
         public ActionResult<ProfitPercentViewModel> PostProfitPercent(ProfitPercentViewModel profitPercent)
         {
+            profitPercent.RegionStatus = RegionStatus.North;
+
             _profitPercentService.Add(profitPercent);
 
             try

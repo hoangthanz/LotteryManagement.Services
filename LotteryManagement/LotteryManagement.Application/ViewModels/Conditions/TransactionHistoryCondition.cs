@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LotteryManagement.Application.ViewModels.Conditions
 {
@@ -10,5 +8,7 @@ namespace LotteryManagement.Application.ViewModels.Conditions
         public int? BillStatus { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
+
+        public string UserId { get; set; }
     }
 }

@@ -182,7 +182,7 @@ namespace LotteryManagement.Controllers
                     _context.SaveChanges();
 
 
-                    var currentProfit = await _context.ProfitPercents.Where(x => x.Status == Status.Active).FirstOrDefaultAsync();
+                    var currentProfit = await _context.ProfitPercents.Where(x => x.Status == Status.Active && bettingOnDe.RegionStatus == x.RegionStatus).FirstOrDefaultAsync();
 
 
                     var ticket = new Ticket()
@@ -319,7 +319,7 @@ namespace LotteryManagement.Controllers
 
 
 
-                    var currentProfit = await _context.ProfitPercents.Where(x => x.Status == Status.Active).FirstOrDefaultAsync();
+                    var currentProfit = await _context.ProfitPercents.Where(x => x.Status == Status.Active && x.RegionStatus == bettingOnDe.RegionStatus).FirstOrDefaultAsync();
 
 
                     var ticket = new Ticket()

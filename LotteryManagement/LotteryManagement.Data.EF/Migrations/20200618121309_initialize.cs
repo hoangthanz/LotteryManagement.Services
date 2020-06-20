@@ -303,7 +303,8 @@ namespace LotteryManagement.Data.EF.Migrations
                     TruotXien8After = table.Column<double>(nullable: false),
                     TruotXien10After = table.Column<double>(nullable: false),
                     Status = table.Column<int>(nullable: false),
-                    IsUsing = table.Column<bool>(nullable: false)
+                    IsUsing = table.Column<bool>(nullable: false),
+                    RegionStatus = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -342,7 +343,9 @@ namespace LotteryManagement.Data.EF.Migrations
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    Coin = table.Column<double>(nullable: false)
+                    Coin = table.Column<double>(nullable: false),
+                    BankCardId = table.Column<string>(nullable: true),
+                    OwnerBankId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -361,7 +364,9 @@ namespace LotteryManagement.Data.EF.Migrations
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    Coin = table.Column<double>(nullable: false)
+                    Coin = table.Column<double>(nullable: false),
+                    BankCardId = table.Column<string>(nullable: true),
+                    OwnerBankId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -552,9 +557,6 @@ namespace LotteryManagement.Data.EF.Migrations
                     RegionStatus = table.Column<int>(nullable: false),
                     Price = table.Column<double>(nullable: false),
                     IsGoal = table.Column<bool>(nullable: true),
-                    CurrentRate = table.Column<double>(nullable: false),
-                    beginRate = table.Column<double>(nullable: false),
-                    endRate = table.Column<double>(nullable: false),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateModified = table.Column<DateTime>(nullable: true),
                     Status = table.Column<int>(nullable: false),

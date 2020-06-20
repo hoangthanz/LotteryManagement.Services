@@ -45,14 +45,20 @@ namespace LotteryManagement.Controllers
             return transactionHistory;
         }
 
-        [HttpPost("/condition")]
+        [HttpPost("condition")]
         public async Task<ActionResult<IEnumerable<TransactionHistoryViewModel>>> GetTransactionHistoriesByCondition(TransactionHistoryCondition condition)
         {
             try
             {
                 var transactionHistory = _context.TransactionHistories.Where(x => x.Status == Status.Active).OrderByDescending(x => x.DateCreated).ToList();
 
-                if(condition.FromDate != null)
+                if (condition.UserId != null)
+                {
+                    transactionHistory = transactionHistory.Where(x => x.UserId.ToString() == condition.UserId).ToList();
+                }
+
+
+                if (condition.FromDate != null)
                 {
                     transactionHistory = transactionHistory.Where(x => x.DateCreated >= condition.FromDate && x.DateCreated <= condition.ToDate).ToList();
                 }

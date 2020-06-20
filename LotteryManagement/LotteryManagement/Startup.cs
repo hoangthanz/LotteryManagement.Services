@@ -5,12 +5,14 @@ using LotteryManagement.Application.System.Users;
 using LotteryManagement.CronJobs;
 using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
+using LotteryManagement.HubConfig;
 using LotteryManagement.Infrastructure.Interfaces;
 using LotteryManagement.Utilities.Constants;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,12 +38,23 @@ namespace LotteryManagement
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "MyPolicy",
                     builder =>
                     {
-                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                        builder.WithOrigins(
+                            "http://192.168.1.254:4200",
+                            "http://localhost:4200",
+                            "https://localhost:4200",
+                            "http://27.73.67.222:4200",
+                            "http://27.73.67.222:6999",
+                            "http://27.73.67.222:7000",
+                            "http://localhost:6999",
+                            "http://localhost:7000"
+                            )
+                        .AllowAnyMethod().AllowAnyHeader().AllowCredentials();
                     });
             });
 
@@ -58,8 +71,8 @@ namespace LotteryManagement
             });
 
 
+            services.AddSignalR();
             services.AddControllers();
-
 
 
             services.AddIdentity<AppUser, AppRole>()
@@ -181,10 +194,22 @@ namespace LotteryManagement
                 c.RoutePrefix = string.Empty;
             });
 
+            app.Use(async (context, next) =>
+            {
+                var hubContext = context.RequestServices
+                                        .GetRequiredService<IHubContext<AccountHub>>();
+                //...
+
+                if (next != null)
+                {
+                    await next.Invoke();
+                }
+            });
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<AccountHub>("/accountHub");
             });
         }
     }

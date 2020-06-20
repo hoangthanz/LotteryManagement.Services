@@ -4,10 +4,12 @@ using LotteryManagement.Application.ViewModels.Conditions;
 using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
 using LotteryManagement.Data.Enums;
+using LotteryManagement.HubConfig;
+using LotteryManagement.TimerFeatures;
 using LotteryManagement.Utilities.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,11 +22,14 @@ namespace LotteryManagement.Controllers
     public class TransactionsController : ControllerBase
     {
         private readonly LotteryManageDbContext _context;
-
-        public TransactionsController(LotteryManageDbContext context)
+        private IHubContext<AccountHub> _hub;
+        public TransactionsController(LotteryManageDbContext context, IHubContext<AccountHub> hub)
         {
             _context = context;
+            _hub = hub;
         }
+
+      
 
         // POST: api/Transactions
         [HttpPost("condition")]
@@ -33,6 +38,11 @@ namespace LotteryManagement.Controllers
             try
             {
                 var transactions = _context.Transactions.Where(x=>x.Status == Status.Active).OrderByDescending(x => x.DateCreated).ToList();
+
+                if(condition.UserId != null)
+                {
+                    transactions = transactions.Where(x => x.UserId.ToString() == condition.UserId).ToList();
+                }
 
                 if (condition.FromDate != null)
                 {
@@ -274,6 +284,8 @@ namespace LotteryManagement.Controllers
 
 
                 await _context.SaveChangesAsync();
+
+                await _hub.Clients.All.SendAsync("changeMoneyInWallet", user.Id.ToString());
             }
             catch (DbUpdateConcurrencyException)
             {

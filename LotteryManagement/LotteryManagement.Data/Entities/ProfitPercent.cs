@@ -68,5 +68,7 @@ namespace LotteryManagement.Data.Entities
 
         public Status Status { get; set; }
         public bool IsUsing { get; set; }
+
+        public RegionStatus RegionStatus { get; set; }
     }
 }
