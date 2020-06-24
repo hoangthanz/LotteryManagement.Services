@@ -3,6 +3,7 @@ using LotteryManagement.Application.ViewModels.Conditions;
 using LotteryManagement.Data.EF;
 using LotteryManagement.Data.Entities;
 using LotteryManagement.Data.Enums;
+using LotteryManagement.Utilities.Constants;
 using LotteryManagement.Utilities.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -45,64 +46,7 @@ namespace LotteryManagement.Controllers
             return de_Lotto;
         }
 
-        // PUT: api/De_Lotto/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDe_Lotto(string id, De_Lotto de_Lotto)
-        {
-            if (id != de_Lotto.Id.ToString())
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(de_Lotto).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!De_LottoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/De_Lotto
-        [HttpPost]
-        public async Task<ActionResult<De_Lotto>> PostDe_Lotto(De_Lotto de_Lotto)
-        {
-            _context.De_Lottos.Add(de_Lotto);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (De_LottoExists(de_Lotto.Id.ToString()))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return CreatedAtAction("GetDe_Lotto", new { id = de_Lotto.Id }, de_Lotto);
-        }
-
-
-        [HttpPost("betting-on")]
+        [HttpPost("betting-on-de")]
         public async Task<ActionResult<object>> Post_BettingOn_De_Lotto(BettingOnDe bettingOnDe)
         {
 
@@ -148,7 +92,7 @@ namespace LotteryManagement.Controllers
 
                     deList = deList.Select(innerItem => innerItem?.Trim())
                         .Where(x => (
-                            !string.IsNullOrEmpty(x) || !string.IsNullOrWhiteSpace(x))
+                            !string.IsNullOrEmpty(x) && !string.IsNullOrWhiteSpace(x))
                             && x.Length == 1
                             && IsNumber(x)
                         ).ToList();
@@ -187,25 +131,25 @@ namespace LotteryManagement.Controllers
 
                     var ticket = new Ticket()
                     {
-                        Lo2So1KAfter = currentProfit.Lo2So1KAfter,
-                        Lo2SoAfter = currentProfit.Lo2SoAfter,
-                        Lo2SoDauAfter = currentProfit.Lo2SoDauAfter,
-                        Lo3SoAfter = currentProfit.Lo3SoAfter,
-                        Lo4SoAfter = currentProfit.Lo4SoAfter,
-                        Cang3After = currentProfit.Cang3After,
-                        DauAfter = currentProfit.DauAfter,
-                        Cang4After = currentProfit.Cang4After,
-                        DeDacBietAfter = currentProfit.DeDacBietAfter,
-                        DeDauDacBietAfter = currentProfit.DeDauDacBietAfter,
-                        DeGiai7After = currentProfit.DeGiai7After,
-                        DeGiaiNhatAfter = currentProfit.DeGiaiNhatAfter,
-                        DuoiAfter = currentProfit.DuoiAfter,
-                        TruotXien10After = currentProfit.TruotXien10After,
-                        TruotXien4After = currentProfit.TruotXien4After,
-                        TruotXien8After = currentProfit.TruotXien8After,
-                        Xien2After = currentProfit.Xien2After,
-                        Xien3After = currentProfit.Xien3After,
-                        Xien4After = currentProfit.Xien4After,
+                        Lo2So1K = currentProfit.Lo2So1K,
+                        Lo2So = currentProfit.Lo2So,
+                        Lo2SoDau = currentProfit.Lo2SoDau,
+                        Lo3So = currentProfit.Lo3So,
+                        Lo4So = currentProfit.Lo4So,
+                        Cang3 = currentProfit.Cang3,
+                        Dau = currentProfit.Dau,
+                        Cang4 = currentProfit.Cang4,
+                        DeDacBiet = currentProfit.DeDacBiet,
+                        DeDauDacBiet = currentProfit.DeDauDacBiet,
+                        DeGiai7 = currentProfit.DeGiai7,
+                        DeGiaiNhat = currentProfit.DeGiaiNhat,
+                        Duoi = currentProfit.Duoi,
+                        TruotXien10 = currentProfit.TruotXien10,
+                        TruotXien4 = currentProfit.TruotXien4,
+                        TruotXien8 = currentProfit.TruotXien8,
+                        Xien2 = currentProfit.Xien2,
+                        Xien3 = currentProfit.Xien3,
+                        Xien4 = currentProfit.Xien4,
                         UserId = bettingOnDe.UserId,
                         Status = Status.Active,
                         De_Total = feeTotal,
@@ -223,7 +167,7 @@ namespace LotteryManagement.Controllers
                         ticket.Content += item + " ";
                     }
 
-                    ticket.Content = "Đơn giá: " + 1000 * bettingOnDe.MultipleNumber;
+                    ticket.Content = "Đơn giá: " + BettingOnPrice.DeDacBiet * bettingOnDe.MultipleNumber;
 
                     await _context.Tickets.AddAsync(ticket);
                     _context.SaveChanges();
@@ -295,6 +239,7 @@ namespace LotteryManagement.Controllers
                     }
 
                     // kiểm tra xem đủ xiền để đặt với bộ số lọc đc ở trên không
+
                     var walletOfUser = await _context.Wallets.Where(x => x.UserId == bettingOnDe.UserId.ToString()).FirstOrDefaultAsync();
 
                     if (walletOfUser == null)
@@ -302,10 +247,55 @@ namespace LotteryManagement.Controllers
                         return BadRequest(new ResponseResult("Không tìm thấy ví của bạn!"));
                     }
 
-                    var feeTotal = deList.Count * bettingOnDe.MultipleNumber*27000;
+                    // Kiểm tra miền và phương thức cược
+
+                    double feeTotal = 0;
+                    double fee = 0;
+                    if (RegionStatus.North == bettingOnDe.RegionStatus)
+                    {
+                        if( De_LottoStatus.DeDacBiet == bettingOnDe.De_LottoStatus
+                            || De_LottoStatus.DeGiaiNhat == bettingOnDe.De_LottoStatus
+                            || De_LottoStatus.DeDauDacBiet == bettingOnDe.De_LottoStatus
+                            )
+                        {
+                            fee = BettingOnPrice.DeDacBiet;
+                        }
+                        else
+                        {
+                            if(De_LottoStatus.DeGiai7 == bettingOnDe.De_LottoStatus)
+                            {
+                                fee = BettingOnPrice.DeGiai7;
+                            }
+                            else
+                            {
+                                return BadRequest(new ResponseResult("Lỗi sai định dạng cược!"));
+                            }
+                        }
+                    }
+
+                    if (RegionStatus.Central == bettingOnDe.RegionStatus || RegionStatus.South == bettingOnDe.RegionStatus)
+                    {
+                        if (De_LottoStatus.DeDacBiet == bettingOnDe.De_LottoStatus
+                            || De_LottoStatus.DeDau == bettingOnDe.De_LottoStatus)
+                        {
+                            fee = BettingOnPrice.DeDacBiet;
+                        }
+                        else
+                        {
+                            if (De_LottoStatus.DeDauDuoi == bettingOnDe.De_LottoStatus)
+                            {
+                                fee = BettingOnPrice.DeDauDuoi;
+                            }
+                            else
+                            {
+                                return BadRequest(new ResponseResult("Lỗi sai định dạng cược!"));
+                            }
+                        }
+                    }
+                    feeTotal = deList.Count * bettingOnDe.MultipleNumber * fee;
 
 
-                    if (walletOfUser.Coin == 0 && walletOfUser.Coin < feeTotal)
+                    if (walletOfUser.Coin <= 0 || walletOfUser.Coin < feeTotal)
                     {
                         return BadRequest(new ResponseResult("Số dư của bạn không đủ để đặt cược"));
                     }
@@ -324,31 +314,36 @@ namespace LotteryManagement.Controllers
 
                     var ticket = new Ticket()
                     {
-                        Lo2So1KAfter = currentProfit.Lo2So1KAfter,
-                        Lo2SoAfter = currentProfit.Lo2SoAfter,
-                        Lo2SoDauAfter = currentProfit.Lo2SoDauAfter,
-                        Lo3SoAfter = currentProfit.Lo3SoAfter,
-                        Lo4SoAfter = currentProfit.Lo4SoAfter,
-                        Cang3After = currentProfit.Cang3After,
-                        DauAfter = currentProfit.DauAfter,
-                        Cang4After = currentProfit.Cang4After,
-                        DeDacBietAfter = currentProfit.DeDacBietAfter,
-                        DeDauDacBietAfter = currentProfit.DeDauDacBietAfter,
-                        DeGiai7After = currentProfit.DeGiai7After,
-                        DeGiaiNhatAfter = currentProfit.DeGiaiNhatAfter,
-                        DuoiAfter = currentProfit.DuoiAfter,
-                        TruotXien10After = currentProfit.TruotXien10After,
-                        TruotXien4After = currentProfit.TruotXien4After,
-                        TruotXien8After = currentProfit.TruotXien8After,
-                        Xien2After = currentProfit.Xien2After,
-                        Xien3After = currentProfit.Xien3After,
-                        Xien4After = currentProfit.Xien4After,
+                        
+                        RegionStatus = currentProfit.RegionStatus,
+                        Lo2So1K = currentProfit.Lo2So1K,
+                        Lo2So = currentProfit.Lo2So,
+                        Lo2SoDau = currentProfit.Lo2SoDau,
+                        Lo3So = currentProfit.Lo3So,
+                        Lo4So = currentProfit.Lo4So,
+                        Cang3 = currentProfit.Cang3,
+                        Dau = currentProfit.Dau,
+                        Cang4 = currentProfit.Cang4,
+                        DeDacBiet = currentProfit.DeDacBiet,
+                        DeDauDacBiet = currentProfit.DeDauDacBiet,
+                        DeGiai7 = currentProfit.DeGiai7,
+                        DeGiaiNhat = currentProfit.DeGiaiNhat,
+                        DeDau = currentProfit.DeDau,
+                        DeDauDuoi = currentProfit.DeDauDuoi,
+                        Duoi = currentProfit.Duoi,
+                        TruotXien10 = currentProfit.TruotXien10,
+                        TruotXien4 = currentProfit.TruotXien4,
+                        TruotXien8 = currentProfit.TruotXien8,
+                        Xien2 = currentProfit.Xien2,
+                        Xien3 = currentProfit.Xien3,
+                        Xien4 = currentProfit.Xien4,
                         UserId = bettingOnDe.UserId,
                         Status = Status.Active,
-                        De_Total = feeTotal,
                         DateCreated = DateTime.Now,
+                        De_Total = feeTotal,
                         Cang_Total = 0,
                         Xien_Total = 0,
+                        Bao_Total = feeTotal,
                         Id = Guid.NewGuid().ToString()
                     };
 
@@ -359,7 +354,7 @@ namespace LotteryManagement.Controllers
                         ticket.Content += item + " ";
                     }
 
-                    ticket.Content += "\nĐơn giá: " + 1000 * bettingOnDe.MultipleNumber;
+                    ticket.Content += "\nĐơn giá: " + fee * bettingOnDe.MultipleNumber;
 
                    await _context.Tickets.AddAsync(ticket);
                     _context.SaveChanges();

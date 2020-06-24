@@ -22,8 +22,8 @@ namespace LotteryManagement.Data.Entities
         /* Tính tỉ lệ */
 
         public double CurrentRate { get; set; }
-        public double beginRate { get; set; }
-        public double endRate { get; set; }
+        public double BeginRate { get; set; }
+        public double EndRate { get; set; }
 
 
         public DateTime DateCreated { set; get; }
@@ -32,5 +32,8 @@ namespace LotteryManagement.Data.Entities
 
         public string TicketId { get; set; }
         public Ticket Ticket { get; set; }
+
+
+        public ProvincialCity ProvincialCity { get; set; }
     }
 }

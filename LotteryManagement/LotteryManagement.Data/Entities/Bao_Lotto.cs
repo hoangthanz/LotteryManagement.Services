@@ -24,5 +24,9 @@ namespace LotteryManagement.Data.Entities
         public string TicketId { get; set; }
         public Ticket Ticket { get; set; }
 
+
+
+        public ProvincialCity ProvincialCity { get; set; }
+
     }
 }

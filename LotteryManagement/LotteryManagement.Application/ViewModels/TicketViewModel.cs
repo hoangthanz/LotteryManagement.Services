@@ -61,5 +61,6 @@ namespace LotteryManagement.Application.ViewModels
         public double TruotXien4After { get; set; }
         public double TruotXien8After { get; set; }
         public double TruotXien10After { get; set; }
+        public RegionStatus RegionStatus { get; set; }
     }
 }

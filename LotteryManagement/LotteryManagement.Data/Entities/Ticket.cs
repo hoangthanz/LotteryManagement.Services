@@ -35,33 +35,35 @@ namespace LotteryManagement.Data.Entities
         /*
          * Tỉ lệ lúc ghi - tránh việc sửa ở bảng tỉ lệ
          */
-        public double Lo2SoAfter { get; set; }
-        public double Lo2SoDauAfter { get; set; }
-        public double Lo2So1KAfter { get; set; }
-        public double Lo3SoAfter { get; set; }
-        public double Lo4SoAfter { get; set; }
+        public double Lo2So { get; set; }
+        public double Lo2SoDau { get; set; }
+        public double Lo2So1K { get; set; }
+        public double Lo3So { get; set; }
+        public double Lo4So { get; set; }
 
-        public double Xien2After { get; set; }
-        public double Xien3After { get; set; }
-        public double Xien4After { get; set; }
+        public double Xien2 { get; set; }
+        public double Xien3 { get; set; }
+        public double Xien4 { get; set; }
 
-        public double DeDacBietAfter { get; set; }
-        public double DeDauDacBietAfter { get; set; }
-        public double DeGiai7After { get; set; }
-        public double DeGiaiNhatAfter { get; set; }
+        public double DeDacBiet { get; set; }
+        public double DeDauDacBiet { get; set; }
+        public double DeGiai7 { get; set; }
+        public double DeGiaiNhat { get; set; }
+        public double DeDau { get; set; }
+        public double DeDauDuoi { get; set; }
 
-        public double DauAfter { get; set; }
-        public double DuoiAfter { get; set; }
+        public double Dau { get; set; }
+        public double Duoi { get; set; }
 
-        public double Cang3After { get; set; }
+        public double Cang3 { get; set; }
 
-        public double Cang4After { get; set; }
+        public double Cang4 { get; set; }
 
-        public double TruotXien4After { get; set; }
-        public double TruotXien8After { get; set; }
-        public double TruotXien10After { get; set; }
+        public double TruotXien4 { get; set; }
+        public double TruotXien8 { get; set; }
+        public double TruotXien10 { get; set; }
 
-
+        public RegionStatus RegionStatus { get; set; }
 
     }
 }

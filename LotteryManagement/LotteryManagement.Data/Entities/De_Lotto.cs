@@ -25,5 +25,7 @@ namespace LotteryManagement.Data.Entities
         public De_LottoStatus De_LottoStatus { get; set; }
         public RegionStatus RegionStatus { get; set; }
 
+        public ProvincialCity ProvincialCity { get; set; }
+
     }
 }

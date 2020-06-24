@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LotteryManagement.Data.EF.Migrations
 {
     [DbContext(typeof(LotteryManageDbContext))]
-    [Migration("20200618121309_initialize")]
+    [Migration("20200624154747_initialize")]
     partial class initialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -260,6 +260,9 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<int>("ProvincialCity")
+                        .HasColumnType("int");
+
                     b.Property<int>("RegionStatus")
                         .HasColumnType("int");
 
@@ -285,6 +288,9 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<double>("BeginRate")
+                        .HasColumnType("float");
+
                     b.Property<int>("Cang_LottoStatus")
                         .HasColumnType("int");
 
@@ -297,11 +303,17 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("EndRate")
+                        .HasColumnType("float");
+
                     b.Property<bool?>("IsGoal")
                         .HasColumnType("bit");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
+
+                    b.Property<int>("ProvincialCity")
+                        .HasColumnType("int");
 
                     b.Property<int>("RegionStatus")
                         .HasColumnType("int");
@@ -315,12 +327,6 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<string>("Value")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("beginRate")
-                        .HasColumnType("float");
-
-                    b.Property<double>("endRate")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -386,6 +392,9 @@ namespace LotteryManagement.Data.EF.Migrations
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
+
+                    b.Property<int>("ProvincialCity")
+                        .HasColumnType("int");
 
                     b.Property<int>("RegionStatus")
                         .HasColumnType("int");
@@ -601,89 +610,59 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("Cang3After")
+                    b.Property<double>("Cang3")
                         .HasColumnType("float");
 
-                    b.Property<double>("Cang3Previous")
+                    b.Property<double>("Cang4")
                         .HasColumnType("float");
 
-                    b.Property<double>("Cang4After")
+                    b.Property<double>("Dau")
                         .HasColumnType("float");
 
-                    b.Property<double>("Cang4Previous")
+                    b.Property<double>("DeDacBiet")
                         .HasColumnType("float");
 
-                    b.Property<double>("DauAfter")
+                    b.Property<double>("DeDau")
                         .HasColumnType("float");
 
-                    b.Property<double>("DauPrevious")
+                    b.Property<double>("DeDauDacBiet")
                         .HasColumnType("float");
 
-                    b.Property<double>("DeDacBietAfter")
+                    b.Property<double>("DeDauDuoi")
                         .HasColumnType("float");
 
-                    b.Property<double>("DeDacBietPrevious")
+                    b.Property<double>("DeGiai7")
                         .HasColumnType("float");
 
-                    b.Property<double>("DeDauDacBietAfter")
+                    b.Property<double>("DeGiaiNhat")
                         .HasColumnType("float");
 
-                    b.Property<double>("DeDauDacBietPrevious")
-                        .HasColumnType("float");
-
-                    b.Property<double>("DeGiai7After")
-                        .HasColumnType("float");
-
-                    b.Property<double>("DeGiai7Previous")
-                        .HasColumnType("float");
-
-                    b.Property<double>("DeGiaiNhatAfter")
-                        .HasColumnType("float");
-
-                    b.Property<double>("DeGiaiNhatPrevious")
-                        .HasColumnType("float");
-
-                    b.Property<double>("DuoiAfter")
-                        .HasColumnType("float");
-
-                    b.Property<double>("DuoiPrevious")
+                    b.Property<double>("Duoi")
                         .HasColumnType("float");
 
                     b.Property<bool>("IsUsing")
                         .HasColumnType("bit");
 
-                    b.Property<double>("Lo2So1KAfter")
+                    b.Property<double>("Lo2So")
                         .HasColumnType("float");
 
-                    b.Property<double>("Lo2So1KPrevious")
+                    b.Property<double>("Lo2So1K")
                         .HasColumnType("float");
 
-                    b.Property<double>("Lo2SoAfter")
+                    b.Property<double>("Lo2SoDau")
                         .HasColumnType("float");
 
-                    b.Property<double>("Lo2SoDauAfter")
+                    b.Property<double>("Lo3So")
                         .HasColumnType("float");
 
-                    b.Property<double>("Lo2SoDauPrevious")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Lo2SoPrevious")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Lo3SoAfter")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Lo3SoPrevious")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Lo4SoAfter")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Lo4SoPrevious")
+                    b.Property<double>("Lo4So")
                         .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProvincialCity")
+                        .HasColumnType("int");
 
                     b.Property<int>("RegionStatus")
                         .HasColumnType("int");
@@ -691,40 +670,22 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<double>("TruotXien10After")
+                    b.Property<double>("TruotXien10")
                         .HasColumnType("float");
 
-                    b.Property<double>("TruotXien10Previous")
+                    b.Property<double>("TruotXien4")
                         .HasColumnType("float");
 
-                    b.Property<double>("TruotXien4After")
+                    b.Property<double>("TruotXien8")
                         .HasColumnType("float");
 
-                    b.Property<double>("TruotXien4Previous")
+                    b.Property<double>("Xien2")
                         .HasColumnType("float");
 
-                    b.Property<double>("TruotXien8After")
+                    b.Property<double>("Xien3")
                         .HasColumnType("float");
 
-                    b.Property<double>("TruotXien8Previous")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Xien2After")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Xien2Previous")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Xien3After")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Xien3Previous")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Xien4After")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Xien4Previous")
+                    b.Property<double>("Xien4")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -777,10 +738,10 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<double>("Bao_Total")
                         .HasColumnType("float");
 
-                    b.Property<double>("Cang3After")
+                    b.Property<double>("Cang3")
                         .HasColumnType("float");
 
-                    b.Property<double>("Cang4After")
+                    b.Property<double>("Cang4")
                         .HasColumnType("float");
 
                     b.Property<double>("Cang_Total")
@@ -795,64 +756,67 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("DauAfter")
+                    b.Property<double>("Dau")
                         .HasColumnType("float");
 
-                    b.Property<double>("DeDacBietAfter")
+                    b.Property<double>("DeDacBiet")
                         .HasColumnType("float");
 
-                    b.Property<double>("DeDauDacBietAfter")
+                    b.Property<double>("DeDauDacBiet")
                         .HasColumnType("float");
 
-                    b.Property<double>("DeGiai7After")
+                    b.Property<double>("DeGiai7")
                         .HasColumnType("float");
 
-                    b.Property<double>("DeGiaiNhatAfter")
+                    b.Property<double>("DeGiaiNhat")
                         .HasColumnType("float");
 
                     b.Property<double>("De_Total")
                         .HasColumnType("float");
 
-                    b.Property<double>("DuoiAfter")
+                    b.Property<double>("Duoi")
                         .HasColumnType("float");
 
-                    b.Property<double>("Lo2So1KAfter")
+                    b.Property<double>("Lo2So")
                         .HasColumnType("float");
 
-                    b.Property<double>("Lo2SoAfter")
+                    b.Property<double>("Lo2So1K")
                         .HasColumnType("float");
 
-                    b.Property<double>("Lo2SoDauAfter")
+                    b.Property<double>("Lo2SoDau")
                         .HasColumnType("float");
 
-                    b.Property<double>("Lo3SoAfter")
+                    b.Property<double>("Lo3So")
                         .HasColumnType("float");
 
-                    b.Property<double>("Lo4SoAfter")
+                    b.Property<double>("Lo4So")
                         .HasColumnType("float");
+
+                    b.Property<int>("RegionStatus")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<double>("TruotXien10After")
+                    b.Property<double>("TruotXien10")
                         .HasColumnType("float");
 
-                    b.Property<double>("TruotXien4After")
+                    b.Property<double>("TruotXien4")
                         .HasColumnType("float");
 
-                    b.Property<double>("TruotXien8After")
+                    b.Property<double>("TruotXien8")
                         .HasColumnType("float");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Xien2After")
+                    b.Property<double>("Xien2")
                         .HasColumnType("float");
 
-                    b.Property<double>("Xien3After")
+                    b.Property<double>("Xien3")
                         .HasColumnType("float");
 
-                    b.Property<double>("Xien4After")
+                    b.Property<double>("Xien4")
                         .HasColumnType("float");
 
                     b.Property<double>("Xien_Total")
@@ -991,6 +955,9 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<double>("BeginRate")
+                        .HasColumnType("float");
+
                     b.Property<double>("CurrentRate")
                         .HasColumnType("float");
 
@@ -1000,11 +967,17 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<DateTime?>("DateModified")
                         .HasColumnType("datetime2");
 
+                    b.Property<double>("EndRate")
+                        .HasColumnType("float");
+
                     b.Property<bool?>("IsGoal")
                         .HasColumnType("bit");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
+
+                    b.Property<int>("ProvincialCity")
+                        .HasColumnType("int");
 
                     b.Property<int>("RegionStatus")
                         .HasColumnType("int");
@@ -1021,12 +994,6 @@ namespace LotteryManagement.Data.EF.Migrations
 
                     b.Property<int>("Xien_LottoStatus")
                         .HasColumnType("int");
-
-                    b.Property<double>("beginRate")
-                        .HasColumnType("float");
-
-                    b.Property<double>("endRate")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 

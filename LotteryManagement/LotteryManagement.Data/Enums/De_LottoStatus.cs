@@ -5,6 +5,9 @@
         DeDacBiet,
         DeDauDacBiet,
         DeGiai7,
-        DeGiaiNhat
+        DeGiaiNhat,
+
+        DeDau,
+        DeDauDuoi
     }
 }

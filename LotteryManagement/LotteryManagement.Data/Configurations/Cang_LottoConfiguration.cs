@@ -13,8 +13,8 @@ namespace LotteryManagement.Data.Configurations
 
 
             builder.Property(x => x.CurrentRate).IsRequired();
-            builder.Property(x => x.beginRate).IsRequired();
-            builder.Property(x => x.endRate).IsRequired();
+            builder.Property(x => x.BeginRate).IsRequired();
+            builder.Property(x => x.EndRate).IsRequired();
 
             builder.Property(x => x.Value).IsRequired();
             builder.Property(x => x.Cang_LottoStatus).IsRequired();
