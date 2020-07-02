@@ -14,13 +14,12 @@ namespace LotteryManagement.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TestController : ControllerBase
+    public class InitializeController : ControllerBase
     {
-
         private readonly LotteryManageDbContext _context;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        public TestController(
+        public InitializeController(
             LotteryManageDbContext context,
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager
@@ -31,7 +30,7 @@ namespace LotteryManagement.Controllers
             _signInManager = signInManager;
         }
 
-        [HttpGet("SeedData")]
+        [HttpGet("Initialize-Database")]
         [AllowAnonymous]
         public async Task<IActionResult> SeedData()
         {
@@ -41,6 +40,7 @@ namespace LotteryManagement.Controllers
                 {
                     List<Function> functions = new List<Function>()
                     {
+                        new Function(){ Id = TextHelper.RandomString(10, false), Name = "Quyền Admin", Code = "ExportXLS", Status = Status.Active},
                         new Function(){ Id = TextHelper.RandomString(10, false), Name = "Điều chỉnh tài khoản", Code = "Admin", Status = Status.Active},
                         new Function(){ Id = TextHelper.RandomString(10, false), Name = "", Code = "Player", Status = Status.Active},
 
@@ -58,8 +58,8 @@ namespace LotteryManagement.Controllers
 
                     };
 
-                    //var fun = new Function() { Id = TextHelper.RandomString(10, false), Name = "Điều chỉnh tài khoản", Code = "Account", Status = Status.Active };
                     await _context.Functions.AddRangeAsync(functions);
+                    await _context.SaveChangesAsync();
 
                 }
 
@@ -74,18 +74,72 @@ namespace LotteryManagement.Controllers
                         FirstName = "Admin",
                         LastName = "Lottery",
                         UserName = "admin",
-                        PhoneNumber = "0953421059",
+                        PhoneNumber = "0900000000",
                         Avatar = "",
-                        NickName = "admin",
+                        NickName = "Adminstrator",
                         TransactionPassword = "123456",
-                        RefRegisterLink = "x",
-                        
-                        WalletId = "QAZWSXEDC"
+                        RefRegisterLink = "",
+                        WalletId = ""
                     };
                     var result = await _userManager.CreateAsync(user, "123123aA@");
                     await _context.AppUsers.AddAsync(user);
                 }
 
+                if (!_context.Wallets.Any())
+                {
+                    var user = _context.AppUsers.Where(x => x.UserName == "admin").FirstOrDefault();
+
+                    var wallet = new Wallet
+                    {
+                        DateCreated = DateTime.Now,
+                        PendingCoin = 0,
+                        Coin = 999999999,
+                        Id = Guid.NewGuid().ToString(),
+                        Status = Status.Active,
+                        PromotionCoin = 0,
+                        WalletId = TextHelper.RandomString(10),
+                        UserId = user.Id.ToString()
+                    };
+
+                    string walletId = wallet.WalletId;
+
+                    await _context.Wallets.AddAsync(wallet);
+                    _context.SaveChanges();
+
+                    user.WalletId = walletId;
+                    _context.AppUsers.Update(user);
+                    _context.SaveChanges();
+
+                }
+
+
+                if (!_context.OwnerBanks.Any())
+                {
+                    var banks = new List<OwnerBank>
+                    {
+                        new OwnerBank{
+                            FullNameOwner = "Adminstrator",
+                            BankName = "Ngân hàng ABC",
+                            AccountNumber = "xxxx xxxx xxxx xxxx",
+                            Branch =  "Chi nhánh VN",
+                        },
+                        new OwnerBank{
+                            FullNameOwner = "Adminstrator",
+                            BankName = "Ngân hàng ABC 1",
+                            AccountNumber = "xxxx xxxx xxxx xxxx",
+                            Branch =  "Chi nhánh VN",
+                        },
+                        new OwnerBank{
+                            FullNameOwner = "Adminstrator",
+                            BankName = "Ngân hàng ABC 2",
+                            AccountNumber = "xxxx xxxx xxxx xxxx",
+                            Branch =  "Chi nhánh VN",
+                        }
+                    };
+
+                    _context.OwnerBanks.AddRange(banks);
+                    _context.SaveChanges();
+                }
 
                 if (_context.Permissions.ToList().Count == 0)
                 {
@@ -94,10 +148,10 @@ namespace LotteryManagement.Controllers
                     var user = _context.Users.ToList()[0];
                     foreach (var fun in _context.Functions.ToList())
                     {
-                        var per = new Permission() { Id = Guid.NewGuid().ToString(), DateCreated = DateTime.Now, Status = Status.Active, UserId = user.Id ,FunctionId = fun.Id};
+                        var per = new Permission() { Id = Guid.NewGuid().ToString(), DateCreated = DateTime.Now, Status = Status.Active, UserId = user.Id, FunctionId = fun.Id };
                         permissions.Add(per);
                     }
-                   
+
                     await _context.Permissions.AddRangeAsync(permissions);
                 }
                 await _context.SaveChangesAsync();

@@ -458,6 +458,8 @@ namespace LotteryManagement.Data.EF.Migrations
                     DeDauDacBiet = table.Column<double>(nullable: false),
                     DeGiai7 = table.Column<double>(nullable: false),
                     DeGiaiNhat = table.Column<double>(nullable: false),
+                    DeDau = table.Column<double>(nullable: false),
+                    DeDauDuoi = table.Column<double>(nullable: false),
                     Dau = table.Column<double>(nullable: false),
                     Duoi = table.Column<double>(nullable: false),
                     Cang3 = table.Column<double>(nullable: false),
@@ -465,7 +467,8 @@ namespace LotteryManagement.Data.EF.Migrations
                     TruotXien4 = table.Column<double>(nullable: false),
                     TruotXien8 = table.Column<double>(nullable: false),
                     TruotXien10 = table.Column<double>(nullable: false),
-                    RegionStatus = table.Column<int>(nullable: false)
+                    RegionStatus = table.Column<int>(nullable: false),
+                    ProvincialCity = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

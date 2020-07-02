@@ -175,12 +175,45 @@ namespace LotteryManagement.Controllers
                     return BadRequest(new ResponseResult("Không tìm thấy người dùng này! Vui lòng kiểm tra lại."));
                 }
 
+                var wallet =  _context.Wallets.Where(x => x.UserId == transaction.UserId.ToString()).FirstOrDefault();
+
+                if (wallet == null)
+                {
+                    return BadRequest(new ResponseResult("Không tìm tài khoản ví của bạn !, liên hệ giúp đỡ theo đường dây nóng"));
+                }
+
+
+
+
+
+                if ( TransactionType.Withdraw == transaction.TransactionType)
+                {
+                    if (wallet.Coin < transaction.Coin)
+                    {
+                        return BadRequest(new ResponseResult("Số tiền trong ví không đủ để thực hiện thao tác này!"));
+                    }
+                    else
+                    {
+                        wallet.PendingCoin += transaction.Coin;
+
+                        wallet.Coin -= transaction.Coin;
+
+                        _context.Wallets.Update(wallet);
+                    }
+                }
+
+
+
                 transaction.Id = Guid.NewGuid().ToString();
                 transaction.DateCreated = DateTime.Now;
                 transaction.Status = Status.Active;
+                transaction.BillStatus = BillStatus.InProgress;
+
                 _context.Transactions.Add(transaction);
 
+
                 _context.SaveChanges();
+
                 var transViewModel = Mapper.Map<Transaction, TransactionViewModel>(transaction);
                 return transViewModel;
 
@@ -254,8 +287,17 @@ namespace LotteryManagement.Controllers
                     //Rút tiền
                     if (transaction.TransactionType == TransactionType.Withdraw)
                     {
-                        wallet.Coin -= transaction.Coin;
+                        wallet.PendingCoin -= transaction.Coin;
                     }
+                }
+                else
+                {
+                    if (transaction.TransactionType == TransactionType.Withdraw)
+                    {
+                        wallet.PendingCoin -= transaction.Coin;
+                        wallet.Coin += transaction.Coin;
+                    }
+
                 }
               
 

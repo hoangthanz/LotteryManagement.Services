@@ -760,7 +760,13 @@ namespace LotteryManagement.Data.EF.Migrations
                     b.Property<double>("DeDacBiet")
                         .HasColumnType("float");
 
+                    b.Property<double>("DeDau")
+                        .HasColumnType("float");
+
                     b.Property<double>("DeDauDacBiet")
+                        .HasColumnType("float");
+
+                    b.Property<double>("DeDauDuoi")
                         .HasColumnType("float");
 
                     b.Property<double>("DeGiai7")
@@ -789,6 +795,9 @@ namespace LotteryManagement.Data.EF.Migrations
 
                     b.Property<double>("Lo4So")
                         .HasColumnType("float");
+
+                    b.Property<int>("ProvincialCity")
+                        .HasColumnType("int");
 
                     b.Property<int>("RegionStatus")
                         .HasColumnType("int");

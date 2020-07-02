@@ -229,6 +229,7 @@ namespace LotteryManagement.Controllers
                     Bao_Total = feeTotal,
                     Cang_Total = 0,
                     Xien_Total = 0,
+                    ProvincialCity = bettingOnBaoLo.ProvincialCity,
                     Id = Guid.NewGuid().ToString()
                 };
 
@@ -253,6 +254,7 @@ namespace LotteryManagement.Controllers
                         Value = baoLo,
                         Bao_LottoStatus = bettingOnBaoLo.Bao_LottoStatus,
                         RegionStatus = bettingOnBaoLo.RegionStatus,
+                        ProvincialCity = bettingOnBaoLo.ProvincialCity,
                         Price = fee * bettingOnBaoLo.MultipleNumber,
                         IsGoal = null,
                         DateCreated = DateTime.Now,

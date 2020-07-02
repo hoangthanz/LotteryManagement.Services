@@ -156,6 +156,7 @@ namespace LotteryManagement.Controllers
                         DateCreated = DateTime.Now,
                         Cang_Total = 0,
                         Xien_Total = 0,
+                        ProvincialCity = bettingOnDe.ProvincialCity,
                         Id = Guid.NewGuid().ToString()
                     };
                     
@@ -184,6 +185,7 @@ namespace LotteryManagement.Controllers
                             RegionStatus = bettingOnDe.RegionStatus,
                             Price = 1000 * bettingOnDe.MultipleNumber,
                             SpecialDeType = bettingOnDe.SpecialDeType,
+                            ProvincialCity = bettingOnDe.ProvincialCity,
                             IsGoal = null,
                             DateCreated = DateTime.Now,
                             Status = Status.Active,
@@ -418,11 +420,7 @@ namespace LotteryManagement.Controllers
             return de_Lotto;
         }
 
-        private bool De_LottoExists(string id)
-        {
-            return _context.De_Lottos.Any(e => e.Id.ToString() == id);
-        }
-
+  
 
         private bool IsNumber(string str) => int.TryParse(str, out int n);
 

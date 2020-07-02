@@ -4,6 +4,8 @@
     {
 
         Cang3,
+        Cang3Dau,
+        Cang3DauDuoi,
         Cang4
     }
 }

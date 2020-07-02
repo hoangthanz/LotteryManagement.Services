@@ -3,9 +3,9 @@ using System;
 
 namespace LotteryManagement.Application.ViewModels.Conditions
 {
-    public class BettingOnBaoLo
+    public class BettingOnCang
     {
-        public string BaoLoArray { get; set; }
+        public string CangArray { get; set; }
 
         public DivideType DivideType { get; set; }
 
@@ -13,11 +13,10 @@ namespace LotteryManagement.Application.ViewModels.Conditions
 
         public double MultipleNumber { get; set; }
 
-        public Bao_LottoStatus Bao_LottoStatus { get; set; }
+        public Cang_LottoStatus Cang_LottoStatus { get; set; }
 
         public RegionStatus RegionStatus { get; set; }
 
         public ProvincialCity ProvincialCity { get; set; }
-
     }
 }

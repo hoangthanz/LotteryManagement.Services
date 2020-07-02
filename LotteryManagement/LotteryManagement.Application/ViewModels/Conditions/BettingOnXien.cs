@@ -16,5 +16,7 @@ namespace LotteryManagement.Application.ViewModels.Conditions
         public Xien_LottoStatus Xien_LottoStatus{ get; set; }
 
         public RegionStatus RegionStatus { get; set; }
+
+        public ProvincialCity ProvincialCity { get; set; }
     }
 }

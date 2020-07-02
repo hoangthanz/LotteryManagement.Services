@@ -65,5 +65,7 @@ namespace LotteryManagement.Data.Entities
 
         public RegionStatus RegionStatus { get; set; }
 
+        public ProvincialCity ProvincialCity { get; set; }
+
     }
 }

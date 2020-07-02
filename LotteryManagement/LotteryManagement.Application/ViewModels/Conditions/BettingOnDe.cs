@@ -18,5 +18,7 @@ namespace LotteryManagement.Application.ViewModels.Conditions
         public RegionStatus RegionStatus { get; set; }
 
         public SpecialDeType SpecialDeType { get; set; }
+
+        public ProvincialCity ProvincialCity { get; set; }
     }
 }
